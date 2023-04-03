@@ -1,0 +1,486 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/size_config.dart';
+import 'package:trial_fyp_mobile/utility/constants.dart';
+import 'package:trial_fyp_mobile/widgets/primary_button.dart';
+
+class CompleteRegister extends StatefulWidget {
+  const CompleteRegister({super.key});
+
+  @override
+  State<CompleteRegister> createState() => _CompleteRegisterState();
+}
+
+class _CompleteRegisterState extends State<CompleteRegister> {
+  String? ageString;
+  late int? age = 0;
+  late double? weight = 0;
+
+  String? feetString;
+  late double? feet = 0;
+
+  String? inchesString;
+  late double? inches = 0;
+
+  String? activityLevel;
+  String? goal;
+
+  bool isAgreed = false;
+  final TextEditingController weightController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text("SIGN UP", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.black),),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+                      onTap: (){
+                      Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                        "assets/backbutton3.svg",
+                        width: getProportionateScreenWidth(56),
+                        height: getProportionateScreenHeight(51),
+                      ),
+                    ),
+        ) ,
+      ),
+      body: SafeArea(
+          child: SingleChildScrollView(
+        child: Stack(clipBehavior: Clip.none, children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              
+
+              /* const Center(
+                child: Text(
+                  "SIGN UP",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+              ), */
+              SizedBox(
+                height: getProportionateScreenHeight(20),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(50), 0, 0, 0),
+                child: const Text(
+                  "Age",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(40), 0, 0, 0),
+                //width: getProportionateScreenWidth(250),
+                decoration: BoxDecoration(
+                  color: const Color(kPrimaryBackgroundColor),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: DropdownButton2(
+                  underline: SizedBox(),
+                  dropdownStyleData: DropdownStyleData(
+                      padding: EdgeInsets.fromLTRB(
+                          getProportionateScreenWidth(40),
+                          0,
+                          getProportionateScreenWidth(40),
+                          0),
+                      decoration: const BoxDecoration(
+                        color: Color(kPrimaryBackgroundColor),
+                      )),
+                  items: listOfAges.map(buildMenuItem).toList(),
+                  value: ageString,
+                  onChanged: (value) {
+                    setState(() {
+                      ageString = value as String;
+                      age = int.parse(ageString!);
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(30),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(50), 0, 0, 0),
+                child: const Text(
+                  "Weight",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
+              Container(
+                height: getProportionateScreenHeight(55),
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(40), 0, 0, 0),
+                child: Row(
+                  children: [
+                    Container(
+                      height: getProportionateScreenHeight(55),
+                      width: getProportionateScreenWidth(170),
+                      child: TextFormField(
+                        controller: weightController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          setState(() {
+                            weight = double.parse(value);
+                          });
+                        },
+                        style: const TextStyle(fontSize: 18),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: const Color(kPrimaryBackgroundColor),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none),
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      " kg",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(30),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(50), 0, 0, 0),
+                child: const Text(
+                  "Height",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(
+                        getProportionateScreenWidth(40), 0, 0, 0),
+                    //width: getProportionateScreenWidth(250),
+                    decoration: BoxDecoration(
+                      color: const Color(kPrimaryBackgroundColor),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: DropdownButton2(
+                      underline: SizedBox(),
+                      dropdownStyleData: DropdownStyleData(
+                          padding: EdgeInsets.fromLTRB(
+                              getProportionateScreenWidth(5),
+                              0,
+                              getProportionateScreenWidth(5),
+                              0),
+                          decoration: const BoxDecoration(
+                            color: Color(kPrimaryBackgroundColor),
+                          )),
+                      items: listOfFeet.map(buildMenuItem).toList(),
+                      value: feetString,
+                      onChanged: (value) {
+                        setState(() {
+                          feetString = value as String;
+                          feet = double.parse(feetString!);
+                        });
+                      },
+                    ),
+                  ),
+                  const Text(
+                    " ft",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(
+                        getProportionateScreenWidth(40), 0, 0, 0),
+                    //width: getProportionateScreenWidth(250),
+                    decoration: BoxDecoration(
+                      color: const Color(kPrimaryBackgroundColor),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: DropdownButton2(
+                      underline: SizedBox(),
+                      dropdownStyleData: DropdownStyleData(
+                          padding: EdgeInsets.fromLTRB(
+                              getProportionateScreenWidth(5),
+                              0,
+                              getProportionateScreenWidth(5),
+                              0),
+                          decoration: const BoxDecoration(
+                            color: Color(kPrimaryBackgroundColor),
+                          )),
+                      items: listOfInches.map(buildMenuItem).toList(),
+                      value: inchesString,
+                      onChanged: (value) {
+                        setState(() {
+                          inchesString = value as String;
+                          inches = double.parse(inchesString!);
+                        });
+                      },
+                    ),
+                  ),
+                  const Text(
+                    " inches",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(40),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(50), 0, 0, 0),
+                child: const Text(
+                  "Activity Level",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(40), 0, 0, 0),
+                //width: getProportionateScreenWidth(250),
+                decoration: BoxDecoration(
+                  color: const Color(kPrimaryBackgroundColor),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: DropdownButton2(
+                  underline: SizedBox(),
+                  dropdownStyleData: const DropdownStyleData(
+                      decoration: BoxDecoration(
+                    color: Color(kPrimaryBackgroundColor),
+                  )),
+                  items: listOfActivityLevels.map(buildMenuItem).toList(),
+                  value: activityLevel,
+                  onChanged: (value) {
+                    setState(() {
+                      activityLevel = value as String;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(30),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(50), 0, 0, 0),
+                child: const Text(
+                  "Goal",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    getProportionateScreenWidth(40), 0, 0, 0),
+                //width: getProportionateScreenWidth(250),
+                decoration: BoxDecoration(
+                  color: const Color(kPrimaryBackgroundColor),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: DropdownButton2(
+                  underline: SizedBox(),
+                  dropdownStyleData: const DropdownStyleData(
+                      decoration: BoxDecoration(
+                    color: Color(kPrimaryBackgroundColor),
+                  )),
+                  items: listOfGoals.map(buildMenuItem).toList(),
+                  value: goal,
+                  onChanged: (value) {
+                    setState(() {
+                      goal = value as String;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(30),
+              ),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(
+                        getProportionateScreenWidth(40), 0, 0, 0),
+                    child: Transform.scale(
+                      scale: 2.0,
+                      child: Checkbox(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          checkColor: Colors.black,
+                          activeColor: Color(kPrimaryBackgroundColor),
+                          value: isAgreed,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isAgreed = value!;
+                            });
+                          }),
+                    ),
+                  ),
+                  const Text(
+                    "I agree to the ",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  const Text(
+                    "Terms and Conditions",
+                    style: TextStyle(
+                        fontSize: 17,
+                        decoration: TextDecoration.underline,
+                        color: Color(kPrimaryColor)),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(20),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(80, 0, 80, 0),
+                child: GestureDetector(
+                  onTap: isAgreed == true
+                      ? () {
+                          //push to home page OR LOGIN PAGE after creating the account
+                          //ASK BOO BS HOW TO DO IT BECAUSE i WANT TO CLEAR THE STACK AND START FRESH FROM LOGIN
+                          print(age);
+                          print(weight);
+                          print(feet);
+                          print(inches);
+                          print(activityLevel);
+                          print(goal);
+                        }
+                      : null,
+                  child: isAgreed
+                      ? const FPrimaryButton(text: "SIGN UP")
+                      : Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                              vertical: getProportionateScreenHeight(18),
+                              horizontal: getProportionateScreenWidth(8)),
+                          decoration: BoxDecoration(
+                            color: const Color(kPrimaryColor).withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(
+                              40,
+                            ),
+                          ),
+                          child: const Text(
+                            "SIGN UP",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+              right: 0,
+              top: getProportionateScreenHeight(10),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: SvgPicture.asset(
+                  "assets/Rectangle10.svg",
+                  height: 200,
+                  width: 170,
+                ),
+              )),
+          Positioned(
+              left: 0,
+              top: getProportionateScreenHeight(670),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: SvgPicture.asset(
+                  "assets/Rectangle12.svg",
+                  height: 200,
+                  width: 170,
+                ),
+              )),
+        ]),
+      )),
+    );
+  }
+}
+
+DropdownMenuItem<String> buildMenuItem(String item) {
+  return DropdownMenuItem<String>(
+      value: item,
+      child: Text(
+        item,
+        style: const TextStyle(color: Colors.black, fontSize: 23),
+      ));
+}
+
+final listOfAges = [
+  '16',
+  '17',
+  '18',
+  '19',
+  '20',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26'
+];
+
+final listOfFeet = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+];
+
+final listOfInches = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+];
+
+final listOfActivityLevels = [
+  sedentary,
+  slightlyActive,
+  moderatelyActive,
+  active,
+  veryActive
+];
+
+final listOfGoals = [gainWeight, loseWeight, maintainWeight];
