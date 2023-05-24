@@ -1,12 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:flutter_svg/svg.dart';
 import 'authentication.dart';
 
+
+
+
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
 
+  static const id = "/onboardingScreen";
+  
   @override
   State<Onboarding> createState() => _OnboardingState();
 }
@@ -83,6 +90,7 @@ class _OnboardingState extends State<Onboarding> {
                   if(currentIndex == contents.length -1){
                     //if "continue" navigate to the welcome screen
                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Welcome()));
+                     
                   }
                   _controller.nextPage(duration: Duration(milliseconds: 100), curve: Curves.easeIn);
       

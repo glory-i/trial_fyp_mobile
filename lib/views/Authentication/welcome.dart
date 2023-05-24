@@ -9,6 +9,8 @@ import 'authentication.dart';
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
 
+    static const id = "/welcomeScreen";
+
   @override
   State<Welcome> createState() => _WelcomeState();
 }

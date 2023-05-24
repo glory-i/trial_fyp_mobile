@@ -3,23 +3,39 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/widgets/loading_indicator.dart';
+import '../../services/authenticationServices/authenticationServices.dart';
 import '../../size_config.dart';
 import '../../utility/constants.dart';
+import '../../utility/utility.dart';
 import '../../widgets/primary_button.dart';
 import 'authentication.dart';
 
 class ForgotPasswordOTP extends StatefulWidget {
-  const ForgotPasswordOTP({super.key});
-
+  
+  late String email;
+  ForgotPasswordOTP({super.key,required this.email});
+ 
+  static const id = "/forgotPasswordScreen2";
   @override
-  State<ForgotPasswordOTP> createState() => _ForgotPasswordOTPState();
+  State<ForgotPasswordOTP> createState() => _ForgotPasswordOTPState(email);
 }
 
 
 int otp = 0;
 
 class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
-   
+  
+  late String email;
+  late bool isLoading = false;
+  _ForgotPasswordOTPState(this.email);
+
+  @override
+  void initState() {
+    sendOtp(email,email);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,14 +125,38 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                   Padding(
                     padding:  EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(80)),
                     child: GestureDetector(
-                      onTap: (){
+                      onTap: () async {
                         //call validate otp at the backend and pass otp
                         //go to change password screen
-                        print(otp);
+                        setState(() {
+                        isLoading = true;
+                      });
+                      if (await hasInternetConnection()) {
+                        var apiResponse = await validateOtp(otp.toString(),email,email);
+                        if (apiResponse!.message == failure) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          showErrorSnackBar(
+                              apiResponse.error!.message, context);
+                        } else {
+                          setState(() {
+                            isLoading = false;
+                          });
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ChangePassword ())); 
+                            builder: (context) => ChangePassword (email: email,)));
+                        }
+                      } else {
+                        showErrorSnackBar(
+                            "Failed to connect, Please check your connection",
+                            context);
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+
                       },
-                      child: const FPrimaryButton(text: "NEXT"),
+                      child: isLoading? const FLoadingScreen(): const FPrimaryButton(text: "NEXT"),
                     ),
                   ),
               
@@ -131,7 +171,40 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                   height: getProportionateScreenHeight(20),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+//call the send email endpoint again
+                    //PLEASEEE DO NOT FORGET TO UN COMMENT THIS ENDPOINT WHEN THE TIME SHOULD REACH
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    if (await hasInternetConnection()) {
+                      var apiResponse =
+                          await sendOtp(email, email);
+                      if (apiResponse!.message == failure) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                        showErrorSnackBar(apiResponse.error!.message, context);
+                      }
+
+                      else{
+                        setState(() {
+                          isLoading = false;
+                        });
+                        showSuccessSnackBar("OTP has been resent",context);
+                      }
+
+                    }
+                    else {
+                      setState(() {
+                        isLoading = false;
+                      });
+
+                      showErrorSnackBar(
+                          "Failed to connect, Check your connection", context);
+                    }
+                  },
                   child: const Padding(
                     padding: EdgeInsets.fromLTRB(80, 0, 0, 0),
                     child: Text(

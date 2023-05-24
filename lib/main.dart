@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trial_fyp_mobile/views/Authentication/otp.dart';
 import 'views/Authentication/authentication.dart';
 
 void main() {
@@ -18,6 +19,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const Onboarding(),
+      routes: {
+        Onboarding.id :(context) => const Onboarding(),
+        Login.id :(context) => const Login(),
+      },
       //home: OTP(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(inputDecorationTheme: const InputDecorationTheme(border: InputBorder.none)),
