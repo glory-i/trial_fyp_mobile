@@ -27,7 +27,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   final storage = const FlutterSecureStorage();
 
   late bool isPasswordVisible = false;
@@ -49,6 +48,7 @@ class _LoginState extends State<Login> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -184,7 +184,8 @@ class _LoginState extends State<Login> {
                       horizontal: getProportionateScreenWidth(40)),
                   child: GestureDetector(
                     onTap: () async {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Home()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Home()));
 
                       // if (_formkey.currentState!.validate()) {
                       //   setState(() {
@@ -197,7 +198,7 @@ class _LoginState extends State<Login> {
                       //     var loginResponseModel = await login(LoginModel(
                       //         usernameOrEmail: usernameController.text,
                       //         password: passwordController.text));
-                          
+
                       //       storeToken(loginResponseModel!.token!);
                       //       getToken();
 
@@ -211,8 +212,6 @@ class _LoginState extends State<Login> {
                       //   //     var loginResponseModel = loginResponseModelFromJson(apiResponse.data);
                       //   //     storeToken(loginResponseModel.token!);
                       //   //     getToken();
-
-
 
                       //   //     setState(() {
                       //   //       isLoading = false;

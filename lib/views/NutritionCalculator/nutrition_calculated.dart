@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
+import 'package:trial_fyp_mobile/utility/constants.dart';
+import 'package:trial_fyp_mobile/views/MealPlan/meal.dart';
 
 class NutritionCalculated extends StatelessWidget {
   const NutritionCalculated({super.key});
@@ -49,17 +51,103 @@ class NutritionCalculated extends StatelessWidget {
                 ),
               ),
               SizedBox(height: getProportionateScreenHeight(30)),
-              Row(
-                children: [
-                  Row(
-                    children: [SvgPicture.asset('assets/proteinss.svg')],
-                  )
-                ],
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          ClassCard(
+                            image: proteinPNG,
+                            foodClass: 'Protein',
+                            foodWeight: '145-250kg',
+                            color: kGreenColor,
+                          ),
+                          ClassCard(
+                            image: carbsPNG,
+                            foodClass: 'Carbs',
+                            foodWeight: '145-250kg',
+                            color: kErrorColor,
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          ClassCard(
+                            image: fatPNG,
+                            foodClass: 'Fat',
+                            foodWeight: '145-250kg',
+                            color: kBlueColor,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20)),
+                      const Center(
+                          child: Text(
+                        'Recommended Percent Calories From',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      )),
+                      SizedBox(height: getProportionateScreenHeight(10)),
+                      Placeholder(
+                        fallbackWidth: getProportionateScreenWidth(350),
+                        fallbackHeight: getProportionateScreenHeight(350),
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(50))
+                    ],
+                  ),
+                ),
               )
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class ClassCard extends StatelessWidget {
+  const ClassCard({
+    super.key,
+    required this.image,
+    required this.foodClass,
+    required this.foodWeight,
+    required this.color,
+  });
+
+  final String image;
+  final String foodClass;
+  final String foodWeight;
+  final int color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          child: Image.asset(image),
+          width: getProportionateScreenWidth(60),
+          height: getProportionateScreenHeight(60),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              foodClass,
+              style: TextStyle(
+                  color: Color(color),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            Text(
+              foodWeight,
+              style: TextStyle(color: Color(color), fontSize: 20),
+            ),
+          ],
+        )
+      ],
     );
   }
 }
