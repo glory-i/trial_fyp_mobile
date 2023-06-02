@@ -118,7 +118,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     onTap: () {
                       //MAKE IT A FORM AND ADD THE VALIDATION SO THAT THE USER MUST SELECT A VALUE !!!!
                       //call the ENDPOINT TO GENERATE MEAL PLAN. PASS MIN BUDGET, MAX BUDGET AND THE CALORIE REQUIREMENTS WHICH WILL BE IN THE TOKEN.
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MealScreen(proteinValue: '99', carbsValue: '12', fatValue: '11', imageString: '', mealDescription: '', mealName: '',)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MealScreen(proteinValue: 99, carbsValue: 12, caloriesValue: 600,fatValue: 11, cost: 1200, imageString: '', mealDescription: 'One Portion of Jollof Rice and One Portion of Fried Rice and One cup of Moi Moi', mealName: 'Jollof Rice and Fried Rice and Moi Moi	',)));
               
                       
                     },

@@ -18,4 +18,10 @@ const String failure = 'failure';
 const String success = 'success';
 
 
+const String calorieSVG = "assets/calories.svg";
+const String costSVG = "assets/cost.svg";
+const String proteinPNG = "assets/proteinss.png";
+const String carbsPNG = "assets/carbo.png";
+const String fatPNG = "assets/fat.png";
+
 
