@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
 import 'package:trial_fyp_mobile/views/MealPlan/meal.dart';
@@ -7,8 +8,14 @@ import 'package:trial_fyp_mobile/views/MealPlan/meal.dart';
 class NutritionCalculated extends StatelessWidget {
   const NutritionCalculated({super.key});
   static const id = '/nutritionCalulator';
+
   @override
   Widget build(BuildContext context) {
+    Map<String, double> dataMap = {
+      "Protein": 30,
+      "Carbs": 30,
+      "Fat": 40,
+    };
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -27,34 +34,40 @@ class NutritionCalculated extends StatelessWidget {
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
               ),
               SizedBox(height: getProportionateScreenHeight(20)),
-              Container(
-                width: double.infinity,
-                //height: 250,
-                decoration: BoxDecoration(
-                    color: const Color(0xFFED7C2A),
-                    borderRadius: BorderRadius.circular(200)),
-                child: Container(
-                  padding: EdgeInsets.all(getProportionateScreenWidth(20)),
-                  margin: const EdgeInsets.all(40),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(200)),
-                  child: const Center(
-                    child: Text(
-                      'TOTAL\n2,458\nkcal',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(30)),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Container(
+                        width: double.infinity,
+                        //height: 250,
+                        decoration: const BoxDecoration(
+                            color: Color(0xFFED7C2A),
+                            borderRadius: BorderRadius.horizontal(
+                                left: Radius.elliptical(250, 200),
+                                right: Radius.elliptical(250, 200))),
+                        child: Container(
+                          padding:
+                              EdgeInsets.all(getProportionateScreenWidth(35)),
+                          margin: const EdgeInsets.all(40),
+                          decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.horizontal(
+                                  left: Radius.elliptical(250, 150),
+                                  right: Radius.elliptical(250, 150))),
+                          child: const Center(
+                            child: Text(
+                              'TOTAL\n2,458\nkcal',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(30)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
@@ -72,6 +85,7 @@ class NutritionCalculated extends StatelessWidget {
                           )
                         ],
                       ),
+                      SizedBox(height: getProportionateScreenHeight(20)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
@@ -83,7 +97,7 @@ class NutritionCalculated extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: getProportionateScreenHeight(20)),
+                      SizedBox(height: getProportionateScreenHeight(50)),
                       const Center(
                           child: Text(
                         'Recommended Percent Calories From',
@@ -91,9 +105,28 @@ class NutritionCalculated extends StatelessWidget {
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )),
                       SizedBox(height: getProportionateScreenHeight(10)),
-                      Placeholder(
-                        fallbackWidth: getProportionateScreenWidth(350),
-                        fallbackHeight: getProportionateScreenHeight(350),
+                      // Placeholder(
+                      //   fallbackWidth: getProportionateScreenWidth(350),
+                      //   fallbackHeight: getProportionateScreenHeight(350),
+                      // ),
+                      PieChart(
+                        dataMap: dataMap,
+                        chartType: ChartType.disc,
+                        colorList: const [
+                          Color(kGreenColor),
+                          Color(kErrorColor),
+                          Color(kBlueColor)
+                        ],
+                        legendOptions: const LegendOptions(
+                            legendTextStyle: TextStyle(fontSize: 20)),
+                        chartValuesOptions: const ChartValuesOptions(
+                            decimalPlaces: 0,
+                            showChartValuesInPercentage: true,
+                            showChartValueBackground: false,
+                            chartValueStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
                       ),
                       SizedBox(height: getProportionateScreenHeight(50))
                     ],
