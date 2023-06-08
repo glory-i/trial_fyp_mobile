@@ -49,12 +49,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: getProportionateScreenHeight(20)),
+                SizedBox(height: getProportionateScreenHeight(40)),
                 const Text(
                   'Welcome Glory,',
                   style: TextStyle(fontSize: 22),
                 ),
-                SizedBox(height: getProportionateScreenHeight(20)),
+                SizedBox(height: getProportionateScreenHeight(40)),
                 TextFormField(
                   decoration: InputDecoration(
                       hintText: "Searach for a Meal",
@@ -65,7 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20))),
                 ),
-                SizedBox(height: getProportionateScreenHeight(20)),
+                SizedBox(height: getProportionateScreenHeight(40)),
                 const Text(
                   'Popular Meals',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
