@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:trial_fyp_mobile/views/Authentication/otp.dart';
+import 'package:trial_fyp_mobile/views/NutritionCalculator/nutrition_calculated.dart';
 import 'views/Authentication/authentication.dart';
 
 void main() {
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -20,12 +20,15 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: const Onboarding(),
       routes: {
-        Onboarding.id :(context) => const Onboarding(),
-        Login.id :(context) => const Login(),
+        Onboarding.id: (context) => const Onboarding(),
+        Login.id: (context) => const Login(),
+        NutritionCalculated.id: (context) => const NutritionCalculated()
       },
       //home: OTP(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(inputDecorationTheme: const InputDecorationTheme(border: InputBorder.none)),
+      theme: ThemeData(
+          inputDecorationTheme:
+              const InputDecorationTheme(border: InputBorder.none)),
     );
   }
 }

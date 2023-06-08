@@ -4,6 +4,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/views/NutritionCalculator/nutrition_calculated.dart';
 
 import '../../size_config.dart';
 import '../../utility/constants.dart';
@@ -71,8 +72,8 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
             child: Form(
                 key: _formkey,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(40), 0,
-                      getProportionateScreenWidth(40), 0),
+                  padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(40),
+                      0, getProportionateScreenWidth(40), 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -88,8 +89,8 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                       ),
                       const Text(
                         "Gender",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(10),
@@ -130,8 +131,8 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                       ),
                       const Text(
                         "Age",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(10),
@@ -174,8 +175,8 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                       ),
                       const Text(
                         "Weight",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(10),
@@ -207,14 +208,15 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                                     if (value.isNotEmpty) {
                                       weight = double.parse(value);
                                     }
-        
+
                                     //updateButtonState();
                                   });
                                 },
                                 style: const TextStyle(fontSize: 18),
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(kPrimaryBackgroundColor),
+                                  fillColor:
+                                      const Color(kPrimaryBackgroundColor),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
                                       borderSide: BorderSide.none),
@@ -234,8 +236,8 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                       ),
                       const Text(
                         "Height",
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(10),
@@ -327,119 +329,117 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           ),
                         ],
                       ),
-
                       SizedBox(
-                  height: getProportionateScreenHeight(30),
-                ),
-                const Text(
-                  "Activity Level",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(10),
-                ),
-                Container(
-                  width: getProportionateScreenWidth(350),
-                  decoration: BoxDecoration(
-                    color: const Color(kPrimaryBackgroundColor),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: DropdownButtonFormField2(
-                    //underline: SizedBox(),
-                    validator: (value) {
-                      if (value == null) {
-                        return "Please select a value";
-                      }
-                      return null;
-                    },
-                    dropdownStyleData: const DropdownStyleData(
+                        height: getProportionateScreenHeight(30),
+                      ),
+                      const Text(
+                        "Activity Level",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(10),
+                      ),
+                      Container(
+                        width: getProportionateScreenWidth(350),
                         decoration: BoxDecoration(
-                      color: Color(kPrimaryBackgroundColor),
-                    )),
-                    items: listOfActivityLevels.map(buildMenuItem).toList(),
-                    value: activityLevel,
-                    onChanged: (value) {
-                      setState(() {
-                        activityLevel = value as String;
-                        //updateButtonState();
-                      });
-                    },
-                  ),
-                ),
-
-                SizedBox(
-                  height: getProportionateScreenHeight(30),
-                ),
-                const Text(
-                  "Goal",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(10),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(kPrimaryBackgroundColor),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: SizedBox(
-                    width: getProportionateScreenWidth(350),
-                    child: DropdownButtonFormField2(
-                      validator: (value) {
-                        if (value == null) {
-                          return "Please select a value";
-                        }
-                        return null;
-                      },
-                      //underline: SizedBox(),
-                      dropdownStyleData: const DropdownStyleData(
-                          decoration: BoxDecoration(
-                        color: Color(kPrimaryBackgroundColor),
-                      )),
-                      items: listOfGoals.map(buildMenuItem).toList(),
-                      value: goal,
-                      onChanged: (value) {
-                        setState(() {
-                          goal = value as String;
-                          //updateButtonState();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-
-                                  SizedBox(
-                    height: getProportionateScreenHeight(69),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (_formkey.currentState!.validate()) {
-                        print(activityLevel);
-                        print(goal);
-                        print(weight);
-                        print(age);
-                        print(feet);
-                        print(inches);
-
-                        //CALL UCALCULATE NUTRITIONAL REQUIREMENTS ENPOINT PLEASEEEE!!!
-                        //DO LOADING PAGE AND SUCCESS SNACKBAR BEFORE GOING BACK TO PREVIOUS PAGE
-                        //Navigator.pop(context);
-                      }
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          getProportionateScreenWidth(50),
-                          0,
-                          getProportionateScreenWidth(50),
-                          0),
-                      child: const FPrimaryButton(text: "Calculate"),
-                    ),
-                  ),
-                  SizedBox(
-                    height: getProportionateScreenHeight(60),
-                  ),
-        
-                      
+                          color: const Color(kPrimaryBackgroundColor),
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: DropdownButtonFormField2(
+                          //underline: SizedBox(),
+                          validator: (value) {
+                            if (value == null) {
+                              return "Please select a value";
+                            }
+                            return null;
+                          },
+                          dropdownStyleData: const DropdownStyleData(
+                              decoration: BoxDecoration(
+                            color: Color(kPrimaryBackgroundColor),
+                          )),
+                          items:
+                              listOfActivityLevels.map(buildMenuItem).toList(),
+                          value: activityLevel,
+                          onChanged: (value) {
+                            setState(() {
+                              activityLevel = value as String;
+                              //updateButtonState();
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(30),
+                      ),
+                      const Text(
+                        "Goal",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(10),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(kPrimaryBackgroundColor),
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: SizedBox(
+                          width: getProportionateScreenWidth(350),
+                          child: DropdownButtonFormField2(
+                            validator: (value) {
+                              if (value == null) {
+                                return "Please select a value";
+                              }
+                              return null;
+                            },
+                            //underline: SizedBox(),
+                            dropdownStyleData: const DropdownStyleData(
+                                decoration: BoxDecoration(
+                              color: Color(kPrimaryBackgroundColor),
+                            )),
+                            items: listOfGoals.map(buildMenuItem).toList(),
+                            value: goal,
+                            onChanged: (value) {
+                              setState(() {
+                                goal = value as String;
+                                //updateButtonState();
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(69),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (_formkey.currentState!.validate()) {
+                            print(activityLevel);
+                            print(goal);
+                            print(weight);
+                            print(age);
+                            print(feet);
+                            print(inches);
+                            //CALL CALCULATE NUTRITIONAL REQUIREMENTS ENPOINT PLEASEEEE!!!
+                            //DO LOADING PAGE AND SUCCESS SNACKBAR BEFORE GOING BACK TO PREVIOUS PAGE
+                            //Navigator.pop(context);
+                          }
+                          Navigator.pushNamed(context, NutritionCalculated.id);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              getProportionateScreenWidth(50),
+                              0,
+                              getProportionateScreenWidth(50),
+                              0),
+                          child: const FPrimaryButton(text: "Calculate"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(60),
+                      ),
                     ],
                   ),
                 )),

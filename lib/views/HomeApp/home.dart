@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
+import 'package:trial_fyp_mobile/views/HomeApp/dashboard.dart';
 import 'package:trial_fyp_mobile/views/HomeApp/profile.dart';
 import 'package:trial_fyp_mobile/views/MealPlan/create_meal_plan.dart';
 import 'package:trial_fyp_mobile/views/NutritionCalculator/nutrition.dart';
@@ -15,14 +16,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
-  int currentIndex =0;
+  int currentIndex = 0;
   final screens = [
-    ProfileScreen(),
+    DashboardScreen(),
     CreateMealPlan(),
     NutritionCalculatorScreen(),
     ProfileScreen(),
-
   ];
 
   @override
@@ -44,23 +43,19 @@ class _HomeState extends State<Home> {
       body: screens[currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          border: Border(top: BorderSide(width: 2, color: Colors.green))
-        ),
-        
+            border: Border(top: BorderSide(width: 2, color: Colors.green))),
         child: BottomNavigationBar(
-          elevation: 0,
+            elevation: 0,
             currentIndex: currentIndex,
-            onTap: (index){
+            onTap: (index) {
               setState(() {
                 currentIndex = index;
               });
-
             },
             selectedItemColor: const Color(kSelectedNavbarColor),
-            
             type: BottomNavigationBarType.fixed,
             //backgroundColor: Color(kPrimaryBackgroundColor),
-            
+
             items: [
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -68,20 +63,19 @@ class _HomeState extends State<Home> {
                     width: getProportionateScreenWidth(37.5),
                     height: getProportionateScreenHeight(24.08),
                   ),
-
                   activeIcon: SvgPicture.asset(
                     "assets/homeicon2.svg",
                     width: getProportionateScreenWidth(37.5),
                     height: getProportionateScreenHeight(24.08),
                     color: const Color(kSelectedNavbarColor),
-                  ),  
+                  ),
                   label: 'Home'),
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     "assets/mealplanicon2.svg",
                     width: getProportionateScreenWidth(31.87),
                     height: getProportionateScreenHeight(28.33),
-                  ), 
+                  ),
                   activeIcon: SvgPicture.asset(
                     "assets/mealplanicon2.svg",
                     width: getProportionateScreenWidth(37.5),
