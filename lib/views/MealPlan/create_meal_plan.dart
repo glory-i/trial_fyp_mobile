@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/models/authentication/meal/budgetRange.dart';
+import 'package:trial_fyp_mobile/services/authenticationServices/authenticationServices.dart';
+import 'package:trial_fyp_mobile/services/mealservices/mealServices.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
+import 'package:trial_fyp_mobile/utility/utility.dart';
 import 'package:trial_fyp_mobile/views/MealPlan/budget.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
@@ -43,10 +49,26 @@ class _CreateMealPlanState extends State<CreateMealPlan> {
                 height: getProportionateScreenHeight(50),
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   //GO TO GET BUDGET FOR A DAY ENDPOINT
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const BudgetScreen()));
+                  if (await hasInternetConnection()) {
+                    var apiResponse = await getBudgetForDay();
+
+                    if (apiResponse!.message == failure) {
+                      showErrorSnackBar(apiResponse.error!.message, context);
+                    } else {
+                      var newlistOfBudgets =
+                          budgetRangeFromJson(json.encode(apiResponse.data));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BudgetScreen(
+                                newlistOfBudgets: newlistOfBudgets,
+                              )));
+                    }
+                  } else {
+                    showErrorSnackBar(
+                        "Failed to connect, Check your internet connection",
+                        context);
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(11),
@@ -60,10 +82,26 @@ class _CreateMealPlanState extends State<CreateMealPlan> {
                 height: getProportionateScreenHeight(56),
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   //GO TO GET BUDGET FOR A WEEK ENDPOINT
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const BudgetScreen()));
+                  if (await hasInternetConnection()) {
+                    var apiResponse = await getBudgetForWeek();
+
+                    if (apiResponse!.message == failure) {
+                      showErrorSnackBar(apiResponse.error!.message, context);
+                    } else {
+                      var newlistOfBudgets =
+                          budgetRangeFromJson(json.encode(apiResponse.data));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BudgetScreen(
+                                newlistOfBudgets: newlistOfBudgets,
+                              )));
+                    }
+                  } else {
+                    showErrorSnackBar(
+                        "Failed to connect, Check your internet connection",
+                        context);
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(11),
@@ -77,10 +115,26 @@ class _CreateMealPlanState extends State<CreateMealPlan> {
                 height: getProportionateScreenHeight(56),
               ),
               GestureDetector(
-                onTap: () {
-                  //GO TO GET BUDGET FOR A WEEK ENDPOINT
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const BudgetScreen()));
+                onTap: () async {
+                  //GO TO GET BUDGET FOR A MONTH ENDPOINT
+                  if (await hasInternetConnection()) {
+                    var apiResponse = await getBudgetForMonth();
+
+                    if (apiResponse!.message == failure) {
+                      showErrorSnackBar(apiResponse.error!.message, context);
+                    } else {
+                      var newlistOfBudgets =
+                          budgetRangeFromJson(json.encode(apiResponse.data));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BudgetScreen(
+                                newlistOfBudgets: newlistOfBudgets,
+                              )));
+                    }
+                  } else {
+                    showErrorSnackBar(
+                        "Failed to connect, Check your internet connection",
+                        context);
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(11),

@@ -13,7 +13,7 @@ class ApplicationUser {
     String? firstName;
     String? lastName;
     String? gender;
-    int? weight;
+    double? weight;
     double? heightInCm;
     double? heightInFeet;
     double? heightInInches;
@@ -72,10 +72,10 @@ class ApplicationUser {
         firstName: json["firstName"],
         lastName: json["lastName"],
         gender: json["gender"],
-        weight: json["weight"],
+        weight: json["weight"].toDouble(),
         heightInCm: json["heightInCm"]?.toDouble(),
-        heightInFeet: json["heightInFeet"],
-        heightInInches: json["heightInInches"],
+        heightInFeet: json["heightInFeet"].toDouble(),
+        heightInInches: json["heightInInches"].toDouble(),
         activityLevel: json["activityLevel"],
         userActivityLevel: json["userActivityLevel"],
         goal: json["goal"],

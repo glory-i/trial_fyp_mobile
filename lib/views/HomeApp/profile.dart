@@ -1,14 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/models/authentication/applicationUser.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/views/HomeApp/updateProfile.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
+import '../../models/authentication/loginResponseModel.dart';
+import '../../services/authenticationServices/authenticationServices.dart';
 import '../../utility/constants.dart';
+import '../../utility/utility.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
-  
+
   static const id = "/profileScreen";
 
   @override
@@ -16,6 +22,40 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  ApplicationUser? applicationUser;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  Future<void> getUserData() async {
+    if (await hasInternetConnection()) {
+      var apiResponse = await viewUser(await getToken());
+
+      if (apiResponse!.message == failure) {
+        setState(() {
+          isLoading = false;
+        });
+        showErrorSnackBar(apiResponse.error!.message, context);
+      }
+      else{
+        applicationUser = applicationUserFromJson(json.encode(apiResponse.data));
+        setState(() {
+          isLoading = false;
+        });
+      }
+
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      showErrorSnackBar(
+          "Failed to connect, Check your internet connection", context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +69,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           GestureDetector(
             onTap: () {
               ////send to update profile screen
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
-                     
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UpdateProfileScreen(applicationUser: applicationUser!,)));
             },
             child: Container(
               margin: EdgeInsets.only(
@@ -68,8 +108,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               )
             ],
           ),
-          const Text(
-            "Glory Iweriebor",
+          Text(
+            isLoading
+                ? " "
+                : "${applicationUser!.firstName} ${applicationUser!.lastName}",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
           ),
           SizedBox(
@@ -78,86 +120,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: 
-                [
-              const KProfileDetails(
-                  title: "Email",
-                  value: "felixified@gmail.com",
-                  imageString: "assets/email.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              const KProfileDetails(
-                  title: "Username",
-                  value: "felixified",
-                  imageString: "assets/usernameicon.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              const KProfileDetails(
-                  title: "Gender",
-                  value: "Male",
-                  imageString: "assets/gendericon.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              const KProfileDetails(
-                  title: "Age",
-                  value: "19",
-                  imageString: "assets/ageicon.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              const KProfileDetails(
-                  title: "Weight",
-                  value: "70kg",
-                  imageString: "assets/weight2.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              const KProfileDetails(
-                  title: "Height",
-                  value: "150cm",
-                  imageString: "assets/heighticon.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              const KProfileDetails(
-                  title: "Activity Level",
-                  value: "Sedentary",
-                  imageString: "assets/activity.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              const KProfileDetails(
-                  title: "Goal",
-                  value: "Gain Weight",
-                  imageString: "assets/newgoalicon.svg"),
-              const Divider(
-                color: Color(kPrimaryBackgroundColor),
-                thickness: 3,
-              ),
-              SizedBox(height: getProportionateScreenHeight(20),),
-
-              GestureDetector(
-                onTap: (){
-                  //CALL THE LOGOUT ENDPOINT THAT YOU CREATE
-                },
-
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(80), 0, getProportionateScreenWidth(80), 0),
-                  child: const FLogoutButton(text: "LOGOUT"),
-                ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(20),)
-              ],
+                children: [
+                  KProfileDetails(
+                      title: "Email",
+                      value: isLoading ? " " : "${applicationUser!.email}",
+                      imageString: "assets/email.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Username",
+                      value:
+                          isLoading ? " " : "${applicationUser!.userName}",
+                      imageString: "assets/usernameicon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Gender",
+                      value: isLoading ? " " : "${applicationUser!.gender}",
+                      imageString: "assets/gendericon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Age",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.age.toString()}",
+                      imageString: "assets/ageicon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Weight",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.weight.toString()} kg",
+                      imageString: "assets/weight2.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Height",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.heightInCm.toString()} cm",
+                      imageString: "assets/heighticon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Activity Level",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.userActivityLevel}",
+                      imageString: "assets/activity.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Goal",
+                      value: isLoading ? " " : "${applicationUser!.goal}",
+                      imageString: "assets/newgoalicon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(20),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //CALL THE LOGOUT ENDPOINT THAT YOU CREATE
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          getProportionateScreenWidth(80),
+                          0,
+                          getProportionateScreenWidth(80),
+                          0),
+                      child: const FLogoutButton(text: "LOGOUT"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(20),
+                  )
+                ],
               ),
             ),
           ),

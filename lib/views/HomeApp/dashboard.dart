@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trial_fyp_mobile/models/authentication/loginResponseModel.dart';
+import 'package:trial_fyp_mobile/services/authenticationServices/authenticationServices.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
 
@@ -13,7 +15,11 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
+  LoginResponseModel? loginResponseModel;
+  bool isLoading = true;
   MealTime? selectedMealTime;
+
   String availableMeals() {
     if (selectedMealTime == MealTime.breakfast) {
       return 'Breakfast';
@@ -25,9 +31,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     selectedMealTime = MealTime.breakfast;
+    getLoginResponseData();
+
+  }
+
+  Future<void> getLoginResponseData() async {
+    loginResponseModel = loginResponseModelFromJson(await getLoginResponse()??"");
+    setState(() {
+            isLoading = false;
+          });
+
   }
 
   @override
@@ -50,8 +66,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 SizedBox(height: getProportionateScreenHeight(40)),
-                const Text(
-                  'Welcome Glory,',
+                Text(
+                  isLoading? "Welcome" :'Welcome ${loginResponseModel!.userName}',
                   style: TextStyle(fontSize: 22),
                 ),
                 SizedBox(height: getProportionateScreenHeight(40)),

@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/models/authentication/meal/budgetRange.dart';
 import 'package:trial_fyp_mobile/views/MealPlan/meal.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
@@ -9,13 +10,22 @@ import '../../size_config.dart';
 import '../../utility/constants.dart';
 
 class BudgetScreen extends StatefulWidget {
-  const BudgetScreen({super.key});
+  //const BudgetScreen({super.key});
+
+  late List<BudgetRange> newlistOfBudgets;
+  BudgetScreen({super.key, required this.newlistOfBudgets});
 
   @override
-  State<BudgetScreen> createState() => _BudgetScreenState();
+  State<BudgetScreen> createState() => _BudgetScreenState(newlistOfBudgets);
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
+  late List<BudgetRange> newlistOfBudgets;
+  late List<String> listOfBudgets;
+
+  late bool isLoading = false;
+  _BudgetScreenState(this.newlistOfBudgets);
+
   String? minBudgetString;
   late double? minBudget;
 
@@ -23,6 +33,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
   late double? maxBudget;
 
   String? budgetRangeString;
+
+  @override
+  void initState() {
+    listOfBudgets = buildListOfBudget(newlistOfBudgets);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +68,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
+          child: Stack(clipBehavior: Clip.none, children: [
             Column(
               children: [
                 SizedBox(height: getProportionateScreenHeight(42)),
@@ -116,11 +130,22 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 ),
                 GestureDetector(
                     onTap: () {
+
                       //MAKE IT A FORM AND ADD THE VALIDATION SO THAT THE USER MUST SELECT A VALUE !!!!
                       //call the ENDPOINT TO GENERATE MEAL PLAN. PASS MIN BUDGET, MAX BUDGET AND THE CALORIE REQUIREMENTS WHICH WILL BE IN THE TOKEN.
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MealScreen(proteinValue: 99, carbsValue: 12, caloriesValue: 600,fatValue: 11, cost: 1200, imageString: '', mealDescription: 'One Portion of Jollof Rice and One Portion of Fried Rice and One cup of Moi Moi', mealName: 'Jollof Rice and Fried Rice and Moi Moi	',)));
-              
-                      
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MealScreen(
+                                proteinValue: 99,
+                                carbsValue: 12,
+                                caloriesValue: 600,
+                                fatValue: 11,
+                                cost: 1200,
+                                imageString: '',
+                                mealDescription:
+                                    'One Portion of Jollof Rice and One Portion of Fried Rice and One cup of Moi Moi',
+                                mealName:
+                                    'Jollof Rice and Fried Rice and Moi Moi	',
+                              )));
                     },
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(
@@ -171,10 +196,21 @@ DropdownMenuItem<String> buildMenuItem(String item) {
       ));
 }
 
-///THE LIST OF BUDGETS WILL BE GOTTEN FROM THE ENDPOINT O PLEASE.
-final listOfBudgets = [
-  '10000-15000',
-  '15000-20000',
-  '20000-25000',
-  '25000-30000',
-];
+List<String> buildListOfBudget(List<BudgetRange> newlistOfBudgetRange) {
+  late List<String> listOfBudgetRange = [];
+
+  for (int i = 0; i < newlistOfBudgetRange.length; i++) {
+    listOfBudgetRange.add("${newlistOfBudgetRange[i].minBudget}-${newlistOfBudgetRange[i].maxBudget}");
+  }
+  return listOfBudgetRange;
+}
+
+
+// ///THE LIST OF BUDGETS WILL BE GOTTEN FROM THE ENDPOINT O PLEASE.
+// final listOfBudgets = [
+//   '10000-15000',
+//   '15000-20000',
+//   '20000-25000',
+//   '25000-30000',
+// ];
+

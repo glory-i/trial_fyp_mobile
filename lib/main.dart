@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         Onboarding.id: (context) => const Onboarding(),
         Login.id: (context) => const Login(),
-        NutritionCalculated.id: (context) => const NutritionCalculated()
+        //NutritionCalculated.id: (context) => NutritionCalculated(nutritionResponseModel: )
       },
       //home: OTP(),
       debugShowCheckedModeBanner: false,

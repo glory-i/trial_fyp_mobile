@@ -1,11 +1,18 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/models/nutrition/nutritionRequestModel.dart';
+import 'package:trial_fyp_mobile/models/nutrition/nutritionResponseModel.dart';
+import 'package:trial_fyp_mobile/services/nutritionServices/nutritionServices.dart';
+import 'package:trial_fyp_mobile/utility/utility.dart';
 import 'package:trial_fyp_mobile/views/NutritionCalculator/nutrition_calculated.dart';
+import 'package:trial_fyp_mobile/widgets/loading_indicator.dart';
 
+import '../../services/authenticationServices/authenticationServices.dart';
 import '../../size_config.dart';
 import '../../utility/constants.dart';
 import '../../widgets/primary_button.dart';
@@ -34,6 +41,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
   String? gender;
 
   bool isAgreed = false;
+  bool isLoading = false;
   bool isCheckboxEnabled = false;
   final TextEditingController weightController = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -414,19 +422,59 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                         height: getProportionateScreenHeight(69),
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           if (_formkey.currentState!.validate()) {
-                            print(activityLevel);
-                            print(goal);
-                            print(weight);
-                            print(age);
-                            print(feet);
-                            print(inches);
+                            setState(() {
+                              isLoading = true;
+                            });
+                            if (await hasInternetConnection()) {
+                              var apiResponse =
+                                  await calculateNutritionRequirements(
+                                      NutritionCalculatorRequestModel(
+                                activityLevel: activityLevel,
+                                age: age,
+                                goal: goal,
+                                heightInFeet: feet,
+                                gender: gender,
+                                heightInInches: inches,
+                                weight: weight,
+                              ));
+
+                              if (apiResponse!.message == failure) {
+                                showErrorSnackBar(
+                                    apiResponse.error!.message, context);
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              } else {
+                                var nutritionResponseModel =
+                                    nutritionCalculatorResponseModelFromJson(
+                                        json.encode(apiResponse.data));
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => NutritionCalculated(
+                                          nutritionResponseModel:
+                                              nutritionResponseModel,
+                                        )));
+                              }
+                            } else {
+                              showErrorSnackBar(
+                                  "Failed to connect, Check your internet connection",
+                                  context);
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+
                             //CALL CALCULATE NUTRITIONAL REQUIREMENTS ENPOINT PLEASEEEE!!!
                             //DO LOADING PAGE AND SUCCESS SNACKBAR BEFORE GOING BACK TO PREVIOUS PAGE
                             //Navigator.pop(context);
                           }
-                          Navigator.pushNamed(context, NutritionCalculated.id);
+
+                          //ASK CHIZARAM WHAT THAT LINE IS FOR
+                          //Navigator.pushNamed(context, NutritionCalculated.id);
                         },
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
@@ -434,7 +482,9 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               0,
                               getProportionateScreenWidth(50),
                               0),
-                          child: const FPrimaryButton(text: "Calculate"),
+                          child: isLoading
+                              ? const FLoadingScreen()
+                              : const FPrimaryButton(text: "Calculate"),
                         ),
                       ),
                       SizedBox(

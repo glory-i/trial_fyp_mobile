@@ -2,51 +2,64 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/models/apiresponse/apiresponse.dart';
+import 'package:trial_fyp_mobile/models/authentication/updateUserModel.dart';
+import 'package:trial_fyp_mobile/services/authenticationServices/authenticationServices.dart';
+import 'package:trial_fyp_mobile/utility/utility.dart';
+import 'package:trial_fyp_mobile/widgets/loading_indicator.dart';
 
+import '../../models/authentication/applicationUser.dart';
 import '../../size_config.dart';
 import '../../utility/constants.dart';
 import '../../widgets/primary_button.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  const UpdateProfileScreen({super.key});
+  //const UpdateProfileScreen({super.key});
+
+  late ApplicationUser applicationUser;
+  UpdateProfileScreen({super.key, required this.applicationUser});
 
   @override
-  State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
+  State<UpdateProfileScreen> createState() =>
+      _UpdateProfileScreenState(applicationUser);
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+  late ApplicationUser applicationUser;
+  late bool isLoading = false;
+  _UpdateProfileScreenState(this.applicationUser);
   //INITIALIZE THESE VALUES TO THE USER'S CURRENT DETAILS PLEASE.
-  String? ageString;
+  late String? ageString;
   late int? age;
   late double? weight;
 
-  String? feetString;
+  late String? feetString;
   late double? feet;
 
-  String? inchesString;
+  late String? inchesString;
   late double? inches;
 
-  String? activityLevel;
-  String? goal;
+  late String? activityLevel;
+  late String? goal;
 
   @override
   void initState() {
     //IN THIS PLACE WE WIL GET THE USER'S DETAILS, AND INITIALIZE THE VALUES TO THE USER'S INFORMATION
 
-    weight = 40;
+    weight = applicationUser.weight;
     weightController.text = weight.toString();
 
-    ageString = "19";
-    age = 19;
+    age = applicationUser.age;
+    ageString = age.toString();
 
-    feetString = "5";
-    feet = 5;
+    feet = applicationUser.heightInFeet;
+    feetString = (feet!.toInt()).toString();
 
-    inchesString = "10";
-    inches = 10;
+    inches = applicationUser.heightInInches;
+    inchesString = (inches!.toInt()).toString();
 
-    activityLevel = sedentary;
-    goal = maintainWeight;
+    activityLevel = applicationUser.userActivityLevel;
+    goal = applicationUser.goal;
 
     super.initState();
   }
@@ -69,9 +82,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
+        child: Stack(clipBehavior: Clip.none, children: [
           Form(
               key: _formkey,
               child: Column(
@@ -395,18 +406,48 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     height: getProportionateScreenHeight(69),
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       if (_formkey.currentState!.validate()) {
-                        print(activityLevel);
-                        print(goal);
-                        print(weight);
-                        print(age);
-                        print(feet);
-                        print(inches);
+                        setState(() {
+                          isLoading = true;
+                        });
+
+                        if (await hasInternetConnection()) {
+                          var apiResponse = await updateAccount(
+                              await getToken(),
+                              UpdateUserModel(
+                                  age: age,
+                                  activityLevel: activityLevel,
+                                  goal: goal,
+                                  heightInFeet: feet,
+                                  heightInInches: inches,
+                                  weight: weight));
+
+                          if (apiResponse!.message == failure) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            showErrorSnackBar(
+                                apiResponse.error!.message, context);
+                          } else {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            showSuccessSnackBar(
+                                "Successfully Updated Account", context);
+                          }
+                        } else {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          showErrorSnackBar(
+                              "Failed to connect, Check your internet connection",
+                              context);
+                        }
 
                         //CALL UPDATE ACCOUNT ENDPOINT AND SEND BACK TO THE PROFILE SCREEN
                         //DO LOADING PAGE AND SUCCESS SNACKBAR BEFORE GOING BACK TO PREVIOUS PAGE
-                        Navigator.pop(context);
+                        Navigator.pop(context, applicationUser);
                       }
                     },
                     child: Padding(
@@ -415,7 +456,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           0,
                           getProportionateScreenWidth(80),
                           0),
-                      child: const FPrimaryButton(text: "Save Changes"),
+                      child: isLoading? const FLoadingScreen() : const FPrimaryButton(text: "Save Changes"),
                     ),
                   ),
                   SizedBox(
@@ -423,29 +464,29 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                 ],
               )),
-              Positioned(
-                left: getProportionateScreenWidth(370),
-                child: SvgPicture.asset(
-                  "assets/newrectangle11.svg",
-                  height: getProportionateScreenHeight(200),
-                  width: getProportionateScreenWidth(300),
-                )),
-            Positioned(
-                left: getProportionateScreenWidth(-140),
-                top: getProportionateScreenHeight(600),
-                child: SvgPicture.asset(
-                  "assets/Rectangle13.svg",
-                  height: getProportionateScreenHeight(200),
-                  width: getProportionateScreenWidth(200),
-                )),
-            Positioned(
-                left: getProportionateScreenWidth(370),
-                top: getProportionateScreenHeight(600),
-                child: SvgPicture.asset(
-                  "assets/newrectangle11.svg",
-                  height: getProportionateScreenHeight(250),
-                  width: getProportionateScreenWidth(300),
-                )),
+          Positioned(
+              left: getProportionateScreenWidth(370),
+              child: SvgPicture.asset(
+                "assets/newrectangle11.svg",
+                height: getProportionateScreenHeight(200),
+                width: getProportionateScreenWidth(300),
+              )),
+          Positioned(
+              left: getProportionateScreenWidth(-140),
+              top: getProportionateScreenHeight(600),
+              child: SvgPicture.asset(
+                "assets/Rectangle13.svg",
+                height: getProportionateScreenHeight(200),
+                width: getProportionateScreenWidth(200),
+              )),
+          Positioned(
+              left: getProportionateScreenWidth(370),
+              top: getProportionateScreenHeight(600),
+              child: SvgPicture.asset(
+                "assets/newrectangle11.svg",
+                height: getProportionateScreenHeight(250),
+                width: getProportionateScreenWidth(300),
+              )),
         ]),
       )),
     );

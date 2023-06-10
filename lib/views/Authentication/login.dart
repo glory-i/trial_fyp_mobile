@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trial_fyp_mobile/models/apiresponse/apiresponse.dart';
 import 'package:trial_fyp_mobile/models/authentication/loginModel.dart';
 import 'package:trial_fyp_mobile/models/authentication/loginResponseModel.dart';
 import 'package:trial_fyp_mobile/services/authenticationServices/authenticationServices.dart';
@@ -184,57 +185,62 @@ class _LoginState extends State<Login> {
                       horizontal: getProportionateScreenWidth(40)),
                   child: GestureDetector(
                     onTap: () async {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const Home()));
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => const Home()));
 
-                      // if (_formkey.currentState!.validate()) {
-                      //   setState(() {
-                      //     isLoading = true;
-                      //   });
+                      if (_formkey.currentState!.validate()) {
+                        setState(() {
+                          isLoading = true;
+                        });
 
-                      //   if (await hasInternetConnection()) {
-                      //     //push to home page OR LOGIN PAGE after creating the account
+                        if (await hasInternetConnection()) {
+                          //push to dashboard screen after creating the account
 
-                      //     var loginResponseModel = await login(LoginModel(
-                      //         usernameOrEmail: usernameController.text,
-                      //         password: passwordController.text));
+                          var apiResponse = await login(LoginModel(
+                              usernameOrEmail: usernameController.text,
+                              password: passwordController.text));
 
-                      //       storeToken(loginResponseModel!.token!);
-                      //       getToken();
+                          if (apiResponse!.message == failure) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            showErrorSnackBar(
+                                apiResponse.error!.message, context);
+                          } else {
+                            var loginResponseModel = loginResponseModelFromJson(
+                                json.encode(apiResponse.data));
 
-                      //   //   if (apiResponse!.message == failure) {
-                      //   //     setState(() {
-                      //   //       isLoading = false;
-                      //   //     });
-                      //   //     showErrorSnackBar(
-                      //   //         apiResponse.error!.message, context);
-                      //   //   } else {
-                      //   //     var loginResponseModel = loginResponseModelFromJson(apiResponse.data);
-                      //   //     storeToken(loginResponseModel.token!);
-                      //   //     getToken();
+                            //var loginResponseModel = loginResponseModelFromJson(apiResponse.data);
 
-                      //   //     setState(() {
-                      //   //       isLoading = false;
-                      //   //     });
+                            //store token in flutter secure storage
+                            storeToken(loginResponseModel.token!);
+                            //getToken();
 
-                      //   //     //push to home screen if successful, return error message if not succcessful
-                      //   //     //push to homescreen
-                      //   //     Navigator.of(context).push(MaterialPageRoute(
-                      //   //         builder: (context) => const Home()));
+                            //store the whole loginresponse model in flutter secure storage
+                            storeLoginResponse(loginResponseModelToJson(loginResponseModel));
+                            //getLoginResponse();
 
-                      //   //     //PUSH TO HOME SCREEN IF LOGIN SUCCESSFUL
+                            setState(() {
+                              isLoading = false;
+                            });
 
-                      //   //   }
-                      //    }
-                      //   else {
-                      //     setState(() {
-                      //       isLoading = false;
-                      //     });
-                      //     showErrorSnackBar(
-                      //         "Failed to connect, Check your internet connection",
-                      //         context);
-                      //   }
-                      // }
+                            //push to home screen if successful, return error message if not succcessful
+                            //push to homescreen
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const Home()));
+
+                            //PUSH TO HOME SCREEN IF LOGIN SUCCESSFUL
+
+                          }
+                        } else {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          showErrorSnackBar(
+                              "Failed to connect, Check your internet connection",
+                              context);
+                        }
+                      }
                     },
                     child: isLoading
                         ? const FLoadingScreen()
@@ -296,3 +302,4 @@ class _LoginState extends State<Login> {
     );
   }
 }
+

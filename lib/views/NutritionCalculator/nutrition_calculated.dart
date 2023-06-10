@@ -5,9 +5,22 @@ import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
 import 'package:trial_fyp_mobile/views/MealPlan/meal.dart';
 
-class NutritionCalculated extends StatelessWidget {
-  const NutritionCalculated({super.key});
+import '../../models/nutrition/nutritionResponseModel.dart';
+
+class NutritionCalculated extends StatefulWidget {
+  
+  late NutritionCalculatorResponseModel nutritionResponseModel;
+  NutritionCalculated({super.key, required this.nutritionResponseModel});
   static const id = '/nutritionCalulator';
+
+  @override
+  State<NutritionCalculated> createState() => _NutritionCalculatedState(nutritionResponseModel);
+}
+
+class _NutritionCalculatedState extends State<NutritionCalculated> {
+
+  late NutritionCalculatorResponseModel nutritionResponseModel;
+  _NutritionCalculatedState(this.nutritionResponseModel);
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +69,10 @@ class NutritionCalculated extends StatelessWidget {
                               borderRadius: BorderRadius.horizontal(
                                   left: Radius.elliptical(250, 150),
                                   right: Radius.elliptical(250, 150))),
-                          child: const Center(
+                          child:  Center(
                             child: Text(
-                              'TOTAL\n2,458\nkcal',
-                              style: TextStyle(
+                              'TOTAL\n${nutritionResponseModel.totalCaloriesRequired}\nkcal',
+                              style: const TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -70,17 +83,17 @@ class NutritionCalculated extends StatelessWidget {
                       SizedBox(height: getProportionateScreenHeight(30)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children:  [
                           ClassCard(
                             image: proteinPNG,
                             foodClass: 'Protein',
-                            foodWeight: '145-250kg',
+                            foodWeight: '${nutritionResponseModel.minProteinRequired!.toInt().toString()}-${nutritionResponseModel.maxProteinRequired!.toInt().toString()}kg',
                             color: kGreenColor,
                           ),
                           ClassCard(
                             image: carbsPNG,
                             foodClass: 'Carbs',
-                            foodWeight: '145-250kg',
+                            foodWeight: '${nutritionResponseModel.minCarbsRequired!.toInt().toString()}-${nutritionResponseModel.maxCarbsRequired!.toInt().toString()}kg',
                             color: kErrorColor,
                           )
                         ],
@@ -88,11 +101,11 @@ class NutritionCalculated extends StatelessWidget {
                       SizedBox(height: getProportionateScreenHeight(20)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children:  [
                           ClassCard(
                             image: fatPNG,
                             foodClass: 'Fat',
-                            foodWeight: '145-250kg',
+                            foodWeight: '${nutritionResponseModel.minFatRequired!.toInt().toString()}-${nutritionResponseModel.maxFatRequired!.toInt().toString()}kg',
                             color: kBlueColor,
                           ),
                         ],
