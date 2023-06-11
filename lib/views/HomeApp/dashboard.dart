@@ -4,6 +4,7 @@ import 'package:trial_fyp_mobile/models/authentication/loginResponseModel.dart';
 import 'package:trial_fyp_mobile/services/authenticationServices/authenticationServices.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
+import 'package:trial_fyp_mobile/views/HomeApp/searchResults.dart';
 
 enum MealTime { breakfast, lunch, dinner }
 
@@ -15,7 +16,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   LoginResponseModel? loginResponseModel;
   bool isLoading = true;
   MealTime? selectedMealTime;
@@ -31,19 +31,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     selectedMealTime = MealTime.breakfast;
     getLoginResponseData();
-
   }
 
   Future<void> getLoginResponseData() async {
-    loginResponseModel = loginResponseModelFromJson(await getLoginResponse()??"");
+    loginResponseModel =
+        loginResponseModelFromJson(await getLoginResponse() ?? "");
     setState(() {
-            isLoading = false;
-          });
-
+      isLoading = false;
+    });
   }
 
   @override
@@ -67,16 +66,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 SizedBox(height: getProportionateScreenHeight(40)),
                 Text(
-                  isLoading? "Welcome" :'Welcome ${loginResponseModel!.userName}',
+                  isLoading
+                      ? "Welcome"
+                      : 'Welcome ${loginResponseModel!.userName}',
                   style: TextStyle(fontSize: 22),
                 ),
                 SizedBox(height: getProportionateScreenHeight(40)),
                 TextFormField(
                   decoration: InputDecoration(
-                      hintText: "Searach for a Meal",
+                      hintText: "Search for a Meal",
                       suffixIcon: IconButton(
                         icon: Icon(Icons.search),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const SearchResultsScreen()));
+                        },
                       ),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20))),

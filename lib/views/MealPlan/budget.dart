@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trial_fyp_mobile/models/authentication/meal/budgetRange.dart';
 import 'package:trial_fyp_mobile/views/MealPlan/meal.dart';
+import 'package:trial_fyp_mobile/views/MealPlan/planned_meal.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
 import '../../size_config.dart';
@@ -130,22 +131,23 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 ),
                 GestureDetector(
                     onTap: () {
-
                       //MAKE IT A FORM AND ADD THE VALIDATION SO THAT THE USER MUST SELECT A VALUE !!!!
                       //call the ENDPOINT TO GENERATE MEAL PLAN. PASS MIN BUDGET, MAX BUDGET AND THE CALORIE REQUIREMENTS WHICH WILL BE IN THE TOKEN.
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => MealScreen(
+                      //           proteinValue: 99,
+                      //           carbsValue: 12,
+                      //           caloriesValue: 600,
+                      //           fatValue: 11,
+                      //           cost: 1200,
+                      //           imageString: '',
+                      //           mealDescription:
+                      //               'One Portion of Jollof Rice and One Portion of Fried Rice and One cup of Moi Moi',
+                      //           mealName:
+                      //               'Jollof Rice and Fried Rice and Moi Moi	',
+                      //         )));
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MealScreen(
-                                proteinValue: 99,
-                                carbsValue: 12,
-                                caloriesValue: 600,
-                                fatValue: 11,
-                                cost: 1200,
-                                imageString: '',
-                                mealDescription:
-                                    'One Portion of Jollof Rice and One Portion of Fried Rice and One cup of Moi Moi',
-                                mealName:
-                                    'Jollof Rice and Fried Rice and Moi Moi	',
-                              )));
+                          builder: (context) => PlannedMeal()));
                     },
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(
@@ -200,7 +202,8 @@ List<String> buildListOfBudget(List<BudgetRange> newlistOfBudgetRange) {
   late List<String> listOfBudgetRange = [];
 
   for (int i = 0; i < newlistOfBudgetRange.length; i++) {
-    listOfBudgetRange.add("${newlistOfBudgetRange[i].minBudget}-${newlistOfBudgetRange[i].maxBudget}");
+    listOfBudgetRange.add(
+        "${newlistOfBudgetRange[i].minBudget}-${newlistOfBudgetRange[i].maxBudget}");
   }
   return listOfBudgetRange;
 }
