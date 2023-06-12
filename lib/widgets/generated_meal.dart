@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 
+import '../models/authentication/meal/meal.dart';
+
 class GeneratedMeal extends StatelessWidget {
   const GeneratedMeal({
     super.key,
-    required this.image,
-    required this.mealName,
-    required this.mealAmount,
+    required this.meal,
     required this.onPressed,
   });
 
-  final String image;
-  final String mealName;
-  final String mealAmount;
+  final Meal meal;
   final Function()? onPressed;
 
   @override
@@ -23,7 +21,13 @@ class GeneratedMeal extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.asset(image),
+          ClipRRect(
+
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(meal.flutterImageUrl!,
+                          width: getProportionateScreenWidth(100),
+                height: getProportionateScreenHeight(100),)
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,12 +36,12 @@ class GeneratedMeal extends StatelessWidget {
                 width: getProportionateScreenWidth(200),
                 height: getProportionateScreenHeight(50),
                 child: Text(
-                  mealName,
+                  meal.name!,
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
-              Text(mealAmount)
+              Text(meal.cost!.toString())
             ],
           ),
           SvgPicture.asset(

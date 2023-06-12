@@ -4,53 +4,27 @@ import 'package:flutter_svg/svg.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
 
+import '../../models/authentication/meal/meal.dart';
+
 class MealScreen extends StatefulWidget {
   const MealScreen({
     Key? key,
-    required this.carbsValue,
-    required this.caloriesValue,
-    required this.fatValue,
-    required this.proteinValue,
-    required this.cost,
-    required this.imageString,
-    required this.mealName,
-    required this.mealDescription,
+    required this.meal,
   }) : super(key: key);
 
-  final double? carbsValue;
-  final double? caloriesValue;
-  final double? fatValue;
-  final double? proteinValue;
-  final double? cost;
-  final String? imageString;
-  final String? mealName;
-  final String? mealDescription;
+  final Meal? meal;
 
   @override
-  State<MealScreen> createState() => _MealScreenState(carbsValue, caloriesValue,
-      fatValue, proteinValue, cost, imageString, mealName, mealDescription);
+  State<MealScreen> createState() => _MealScreenState(meal);
 }
 
 //IDEALLY YOU WILL TAKE THE WHOLE MEAL AT ONCE
 class _MealScreenState extends State<MealScreen> {
-  final double? carbsValue;
-  final double? caloriesValue;
-  final double? fatValue;
-  final double? proteinValue;
-  final double? cost;
-  final String? imageString;
-  final String? mealName;
-  final String? mealDescription;
+  
+  final Meal? meal;
 
   _MealScreenState(
-      this.carbsValue,
-      this.caloriesValue,
-      this.fatValue,
-      this.proteinValue,
-      this.cost,
-      this.imageString,
-      this.mealName,
-      this.mealDescription);
+      this.meal);
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +37,9 @@ class _MealScreenState extends State<MealScreen> {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  child: Image.network(
-                    "https://drive.google.com/uc?export=view&id=1Zl1F_pJaFMVdVJa_EQCsZc4Iaur8qXnM",
+                  child: Image.network(meal!.flutterImageUrl!,
                     fit: BoxFit.cover,
+                    
                   ),
                 ),
                 SizedBox(
@@ -79,7 +53,7 @@ class _MealScreenState extends State<MealScreen> {
                     children: [
                       //concatenate the meal name and the meal producer so they know wehre to buy from
                       Text(
-                        mealName!,
+                        meal!.name!,
                         style: TextStyle(
                             fontSize: 28, fontWeight: FontWeight.bold),
                       ),
@@ -87,7 +61,7 @@ class _MealScreenState extends State<MealScreen> {
                         height: getProportionateScreenHeight(20),
                       ),
                       Text(
-                        mealDescription!,
+                        meal!.description!,
                         style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(
@@ -112,14 +86,14 @@ class _MealScreenState extends State<MealScreen> {
                         children: [
                           IconDetails(
                               title: "Calories",
-                              value: "${caloriesValue.toString()}kcal",
+                              value: "${meal!.calories.toString()}kcal",
                               imageString: calorieSVG),
                           SizedBox(
                             width: getProportionateScreenWidth(45),
                           ),
                           IconDetails(
                               title: "Cost",
-                              value: "₦${cost.toString()}",
+                              value: "₦${meal!.cost.toString()}",
                               imageString: costSVG),
                         ],
                       ),
@@ -130,14 +104,14 @@ class _MealScreenState extends State<MealScreen> {
                         children: [
                           PictureDetails(
                               title: "Protein",
-                              value: "${proteinValue.toString()}kg",
+                              value: "${meal!.protein.toString()}kg",
                               imageString: proteinPNG),
                           SizedBox(
                             width: getProportionateScreenWidth(45),
                           ),
                           PictureDetails(
                               title: "Carbs",
-                              value: "${carbsValue.toString()}kg",
+                              value: "${meal!.carbs.toString()}kg",
                               imageString: carbsPNG),
                         ],
                       ),
@@ -149,7 +123,7 @@ class _MealScreenState extends State<MealScreen> {
                         children: [
                           PictureDetails(
                               title: "Fat",
-                              value: "${fatValue.toString()}kg",
+                              value: "${meal!.fat.toString()}kg",
                               imageString: fatPNG),
                         ],
                       ),

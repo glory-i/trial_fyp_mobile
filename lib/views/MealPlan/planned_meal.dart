@@ -6,14 +6,24 @@ import 'package:trial_fyp_mobile/utility/constants.dart';
 import 'package:trial_fyp_mobile/widgets/generated_meal.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
+import '../../models/authentication/meal/finalmealplan.dart';
+
 class PlannedMeal extends StatefulWidget {
-  const PlannedMeal({super.key});
+
+  late FinalMealPlan finalMealPlan;
+  late String? duration;
+  PlannedMeal({super.key, required this.finalMealPlan, required this.duration});
 
   @override
-  State<PlannedMeal> createState() => _PlannedMealState();
+  State<PlannedMeal> createState() => _PlannedMealState(finalMealPlan, duration );
 }
 
 class _PlannedMealState extends State<PlannedMeal> {
+  
+  late FinalMealPlan finalMealPlan;
+  late String? duration;
+  _PlannedMealState(this.finalMealPlan, this.duration);
+
   final PageController _pageController = PageController();
   int currentIndex = 0;
   int currentDay = 1;
@@ -32,7 +42,7 @@ class _PlannedMealState extends State<PlannedMeal> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
-                onTap: () {
+                onTap: currentIndex == 0 ? null :() {
                   _pageController.previousPage(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeIn);
@@ -40,7 +50,11 @@ class _PlannedMealState extends State<PlannedMeal> {
                     currentDay--;
                   });
                 },
-                child: SvgPicture.asset(
+                child: currentIndex == 0?SvgPicture.asset(
+                  "assets/group53.svg",
+                  width: getProportionateScreenWidth(56),
+                  height: getProportionateScreenHeight(51),
+                ) :SvgPicture.asset(
                   "assets/backButton4.svg",
                   width: getProportionateScreenWidth(56),
                   height: getProportionateScreenHeight(51),
@@ -54,15 +68,21 @@ class _PlannedMealState extends State<PlannedMeal> {
                     color: Colors.black),
               ),
               GestureDetector(
-                onTap: () {
+                onTap: currentIndex == finalMealPlan.mealPlans!.length-1 ? null:() {
                   _pageController.nextPage(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeIn);
                   setState(() {
                     currentDay++;
                   });
+                  print(finalMealPlan.mealPlans!.length);
+                  print(currentIndex);
                 },
-                child: SvgPicture.asset(
+                child: currentIndex == finalMealPlan.mealPlans!.length-1 ?SvgPicture.asset(
+                  "assets/group54.svg",
+                  width: getProportionateScreenWidth(56),
+                  height: getProportionateScreenHeight(51),
+                ) :SvgPicture.asset(
                   "assets/forwardButton.svg",
                   width: getProportionateScreenWidth(56),
                   height: getProportionateScreenHeight(51),
@@ -73,11 +93,12 @@ class _PlannedMealState extends State<PlannedMeal> {
         ),
       ),
       body: SingleChildScrollView(
+        //clipBehavior: Clip.none,
         child: Column(
           children: [
             SizedBox(height: getProportionateScreenHeight(30)),
             SizedBox(
-              height: getProportionateScreenHeight(1500),
+              height: getProportionateScreenHeight(2000),
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (index) {
@@ -85,6 +106,7 @@ class _PlannedMealState extends State<PlannedMeal> {
                     currentIndex = index;
                   });
                 },
+                itemCount: finalMealPlan.mealPlans!.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(
@@ -103,9 +125,8 @@ class _PlannedMealState extends State<PlannedMeal> {
                         ),
                         GeneratedMeal(
                           onPressed: () {},
-                          image: 'assets/garriImage.png',
-                          mealName: 'Cassava Flakes and Groundnut',
-                          mealAmount: '1000',
+                          meal: finalMealPlan.mealPlans![index].meals![0],
+                          
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -125,9 +146,9 @@ class _PlannedMealState extends State<PlannedMeal> {
                         ),
                         GeneratedMeal(
                           onPressed: () {},
-                          image: 'assets/garriImage.png',
-                          mealName: 'Fried Rice and Meat with Sausage and Egg',
-                          mealAmount: '1000',
+
+                          meal: finalMealPlan.mealPlans![index].meals![1],
+                          
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -147,9 +168,8 @@ class _PlannedMealState extends State<PlannedMeal> {
                         ),
                         GeneratedMeal(
                           onPressed: () {},
-                          image: 'assets/garriImage.png',
-                          mealName: 'Cassava Flakes and Groundnut',
-                          mealAmount: '1000',
+                          meal: finalMealPlan.mealPlans![index].meals![2],
+                          
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -169,48 +189,78 @@ class _PlannedMealState extends State<PlannedMeal> {
                         SizedBox(height: getProportionateScreenHeight(20)),
 
                         /// Calories
-                        const TotalsCard(
+                        TotalsCard(
                           image: 'assets/caloriesImg.png',
                           totalName: 'Calories',
-                          totalCalculation: '1890 kcal',
+                          totalCalculation: '${finalMealPlan.mealPlans![index].totalCalories.toString()}kcal',
                           color: 0xFF000000,
                         ),
+                        const Divider(
+                          color: Color(kGreenColor),
+                          height: 30,
+                          thickness: 1,
+                        ),
+                        
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Carbs
-                        const TotalsCard(
+                        TotalsCard(
                           image: 'assets/carbo.png',
                           totalName: 'Carbs',
-                          totalCalculation: '1890 kg',
+                          totalCalculation: '${finalMealPlan.mealPlans![index].totalCarbs.toString()}kg',
                           color: kErrorColor,
                         ),
+                        const Divider(
+                          color: Color(kGreenColor),
+                          height: 30,
+                          thickness: 1,
+                        ),
+                        
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Protein
-                        const TotalsCard(
+                        TotalsCard(
                           image: 'assets/proteinss.png',
                           totalName: 'Protein',
-                          totalCalculation: '1890 kcal',
+                          totalCalculation: '${finalMealPlan.mealPlans![index].totalProtein.toString()}kg',
                           color: kGreenColor,
                         ),
+                        const Divider(
+                          color: Color(kGreenColor),
+                          height: 30,
+                          thickness: 1,
+                        ),
+                        
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Fat
-                        const TotalsCard(
+                        TotalsCard(
                           image: 'assets/fat.png',
                           totalName: 'Fats',
-                          totalCalculation: '1890 kg',
+                          totalCalculation: '${finalMealPlan.mealPlans![index].totalFat.toString()}kg',
                           color: kBlueColor,
                         ),
+                        const Divider(
+                          color: Color(kGreenColor),
+                          height: 30,
+                          thickness: 1,
+                        ),
+                        
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Cost
-                        const TotalsCard(
+                        TotalsCard(
                           image: 'assets/cost.png',
                           totalName: 'Cost',
-                          totalCalculation: '2500.0',
+                          totalCalculation: '₦${finalMealPlan.mealPlans![index].totalCost.toString()}',
                           color: 0xFF000000,
                         ),
+                        const Divider(
+                          color: Color(kGreenColor),
+                          height: 30,
+                          thickness: 1,
+                        ),
+                        
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Pie Chart
@@ -222,12 +272,27 @@ class _PlannedMealState extends State<PlannedMeal> {
                           ),
                         ),
                         SizedBox(height: getProportionateScreenHeight(20)),
-                        const PieChart(
+                        PieChart(
                           dataMap: {
-                            "Protein": 30,
-                            "Fat": 30,
-                            "Carbs": 40,
+                            "Protein": finalMealPlan.mealPlans![index].percentCalorieFromProtein!,
+                            "Fat": finalMealPlan.mealPlans![index].percentCalorieFromFat!,
+                            "Carbs": finalMealPlan.mealPlans![index].percentCalorieFromCarbs!,
                           },
+                          colorList: const [
+                          Color(kGreenColor),
+                          Color(kBlueColor),
+                          Color(kErrorColor),
+                        ],
+                        legendOptions: const LegendOptions(
+                            legendTextStyle: TextStyle(fontSize: 20)),
+                        chartValuesOptions: const ChartValuesOptions(
+                            decimalPlaces: 0,
+                            showChartValuesInPercentage: true,
+                            showChartValueBackground: false,
+                            chartValueStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
                         ),
                         SizedBox(height: getProportionateScreenHeight(50)),
                         FPrimaryButton(text: 'Regenerate')

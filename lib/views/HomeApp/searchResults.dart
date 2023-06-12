@@ -37,12 +37,12 @@ class SearchResultsScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20))),
             ),
             SizedBox(height: getProportionateScreenHeight(40)),
-            GeneratedMeal(
-              onPressed: () {},
-              image: 'assets/garriImage.png',
-              mealName: 'Cassava Flakes and Groundnut',
-              mealAmount: '1000',
-            ),
+            // GeneratedMeal(
+            //   onPressed: () {},
+            //   image: 'assets/garriImage.png',
+            //   mealName: 'Cassava Flakes and Groundnut',
+            //   mealAmount: '1000',
+            // ),
             const Divider(
               color: Color(kGreenColor),
               height: 30,

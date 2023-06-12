@@ -62,6 +62,7 @@ class _CreateMealPlanState extends State<CreateMealPlan> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => BudgetScreen(
                                 newlistOfBudgets: newlistOfBudgets,
+                                duration: "Day",
                               )));
                     }
                   } else {
@@ -95,6 +96,7 @@ class _CreateMealPlanState extends State<CreateMealPlan> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => BudgetScreen(
                                 newlistOfBudgets: newlistOfBudgets,
+                                duration: "Week",
                               )));
                     }
                   } else {
@@ -128,6 +130,7 @@ class _CreateMealPlanState extends State<CreateMealPlan> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => BudgetScreen(
                                 newlistOfBudgets: newlistOfBudgets,
+                                duration: "Month",
                               )));
                     }
                   } else {
