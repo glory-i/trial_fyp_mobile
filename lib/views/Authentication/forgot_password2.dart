@@ -12,27 +12,24 @@ import '../../widgets/primary_button.dart';
 import 'authentication.dart';
 
 class ForgotPasswordOTP extends StatefulWidget {
-  
   late String email;
-  ForgotPasswordOTP({super.key,required this.email});
- 
+  ForgotPasswordOTP({super.key, required this.email});
+
   static const id = "/forgotPasswordScreen2";
   @override
   State<ForgotPasswordOTP> createState() => _ForgotPasswordOTPState(email);
 }
 
-
 int otp = 0;
 
 class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
-  
   late String email;
   late bool isLoading = false;
   _ForgotPasswordOTPState(this.email);
 
   @override
   void initState() {
-    sendOtp(email,email);
+    sendOtp(email, email);
     super.initState();
   }
 
@@ -40,10 +37,8 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          clipBehavior: Clip.none,
-          children:[
-            SingleChildScrollView(
+        child: Stack(clipBehavior: Clip.none, children: [
+          SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -51,8 +46,8 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                   height: getProportionateScreenHeight(100),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(20), 0,
-                      getProportionateScreenWidth(20), 0),
+                  padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(20),
+                      0, getProportionateScreenWidth(20), 0),
                   child: const Text(
                     "AN OTP WAS SENT TO YOUR EMAIL ADDRESS",
                     style: TextStyle(
@@ -66,8 +61,8 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                   height: getProportionateScreenHeight(60),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(20), 0,
-                      getProportionateScreenWidth(20), 0),
+                  padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(20),
+                      0, getProportionateScreenWidth(20), 0),
                   child: const Text(
                     "Enter the OTP Code Here",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
@@ -77,38 +72,36 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                 SizedBox(
                   height: getProportionateScreenHeight(30),
                 ),
-                
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-                child: PinCodeTextField(appContext: context, length: 5,
-              textStyle: const TextStyle(color: Colors.white),
-                enableActiveFill: true,
-              
-                pinTheme: PinTheme(
-                  
-                  shape: PinCodeFieldShape.circle,
-                  inactiveColor: Colors.grey,
-                  activeColor: const Color(kPrimaryColor),
-                  selectedColor: Colors.grey,
-                  inactiveFillColor: Colors.grey,
-                  selectedFillColor: Colors.grey,
-                  fieldHeight: 50,
-                  fieldWidth: 50,
-                  borderWidth: 2,
-                  borderRadius: BorderRadius.circular(20),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(20)),
+                  child: PinCodeTextField(
+                    appContext: context,
+                    length: 5,
+                    textStyle: const TextStyle(color: Colors.white),
+                    enableActiveFill: true,
+                    pinTheme: PinTheme(
+                      shape: PinCodeFieldShape.circle,
+                      inactiveColor: Colors.grey,
+                      activeColor: const Color(kPrimaryColor),
+                      selectedColor: Colors.grey,
+                      inactiveFillColor: Colors.grey,
+                      selectedFillColor: Colors.grey,
+                      fieldHeight: 50,
+                      fieldWidth: 50,
+                      borderWidth: 2,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    onCompleted: (value) {
+                      setState(() {
+                        otp = int.parse(value);
+                      });
+                    },
+                    onChanged: (value) {},
+                  ),
                 ),
-                
-                onCompleted: (value){
-                  setState(() {
-                    otp = int.parse(value);
-                  });
-                },
-              
-                onChanged: (value){},
-                ),
-              ),
-              
-              /* Container(
+
+                /* Container(
                         height: 60,
                         margin: const EdgeInsets.fromLTRB(0, 30, 0, 20),
                         width: 200,
@@ -120,19 +113,31 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                           },   
                         ),
                       ), */
-              
-                  SizedBox(height: getProportionateScreenHeight(15),),
-                  Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(80)),
-                    child: GestureDetector(
-                      onTap: () async {
-                        //call validate otp at the backend and pass otp
-                        //go to change password screen
-                        setState(() {
+
+                SizedBox(
+                  height: getProportionateScreenHeight(15),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(80)),
+                  child: GestureDetector(
+                    onTap: () async {
+                      //REMEBER TO REMOVE THIS RUBBISH OOO!!!!!!
+                      // if (otp == 11111) {
+                      //   Navigator.of(context).push(MaterialPageRoute(
+                      //       builder: (context) => ChangePassword(
+                      //             email: email,
+                      //           )));
+                      // }
+                      // //call validate otp at the backend and pass otp
+                      //call validate otp at the backend and pass otp
+                      //go to change password screen
+                      setState(() {
                         isLoading = true;
                       });
                       if (await hasInternetConnection()) {
-                        var apiResponse = await validateOtp(otp.toString(),email,email);
+                        var apiResponse =
+                            await validateOtp(otp.toString(), email, email);
                         if (apiResponse!.message == failure) {
                           setState(() {
                             isLoading = false;
@@ -143,8 +148,10 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                           setState(() {
                             isLoading = false;
                           });
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ChangePassword (email: email,)));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChangePassword(
+                                    email: email,
+                                  )));
                         }
                       } else {
                         showErrorSnackBar(
@@ -154,12 +161,12 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                           isLoading = false;
                         });
                       }
-
-                      },
-                      child: isLoading? const FLoadingScreen(): const FPrimaryButton(text: "NEXT"),
-                    ),
+                    },
+                    child: isLoading
+                        ? const FLoadingScreen()
+                        : const FPrimaryButton(text: "NEXT"),
                   ),
-              
+                ),
                 const Padding(
                   padding: EdgeInsets.fromLTRB(75, 20, 0, 0),
                   child: Text(
@@ -179,24 +186,19 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                     });
 
                     if (await hasInternetConnection()) {
-                      var apiResponse =
-                          await sendOtp(email, email);
+                      var apiResponse = await sendOtp(email, email);
                       if (apiResponse!.message == failure) {
                         setState(() {
                           isLoading = false;
                         });
                         showErrorSnackBar(apiResponse.error!.message, context);
-                      }
-
-                      else{
+                      } else {
                         setState(() {
                           isLoading = false;
                         });
-                        showSuccessSnackBar("OTP has been resent",context);
+                        showSuccessSnackBar("OTP has been resent", context);
                       }
-
-                    }
-                    else {
+                    } else {
                       setState(() {
                         isLoading = false;
                       });
@@ -209,22 +211,51 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                     padding: EdgeInsets.fromLTRB(80, 0, 0, 0),
                     child: Text(
                       "RESEND NEW CODE",
-                      style: TextStyle(fontSize: 20, color: Color(0XFF31990D), fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0XFF31990D),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 )
               ],
             ),
           ),
-        Positioned(right: 0, top: getProportionateScreenHeight(10)  , child: Align(alignment: Alignment.bottomLeft,child: SvgPicture.asset("assets/Rectangle10.svg", height: 200, width: 170,),)),
-        Positioned(right: 0, top: getProportionateScreenHeight(650)  , child: Align(alignment: Alignment.bottomLeft,child: SvgPicture.asset("assets/Rectangle11.svg", height: 200, width: 170,),)),
-        Positioned(left: 0, top: getProportionateScreenHeight(500)  , child: Align(alignment: Alignment.bottomLeft,child: SvgPicture.asset("assets/Rectangle12.svg", height: 200, width: 170,),)),
-        
-
-          ]
-        ),
+          Positioned(
+              right: 0,
+              top: getProportionateScreenHeight(10),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: SvgPicture.asset(
+                  "assets/Rectangle10.svg",
+                  height: 200,
+                  width: 170,
+                ),
+              )),
+          Positioned(
+              right: 0,
+              top: getProportionateScreenHeight(650),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: SvgPicture.asset(
+                  "assets/Rectangle11.svg",
+                  height: 200,
+                  width: 170,
+                ),
+              )),
+          Positioned(
+              left: 0,
+              top: getProportionateScreenHeight(500),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: SvgPicture.asset(
+                  "assets/Rectangle12.svg",
+                  height: 200,
+                  width: 170,
+                ),
+              )),
+        ]),
       ),
     );
- 
   }
 }

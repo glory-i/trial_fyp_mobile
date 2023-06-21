@@ -121,7 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoading
-          ? CircularProgressIndicator()
+          ? const CircularProgressIndicator()
           : SafeArea(
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -143,14 +143,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         isLoading
                             ? "Welcome"
                             : 'Welcome ${loginResponseModel!.userName}',
-                        style: TextStyle(fontSize: 22),
+                        style: const TextStyle(fontSize: 22),
                       ),
                       SizedBox(height: getProportionateScreenHeight(40)),
                       TextFormField(
                         decoration: InputDecoration(
                             hintText: "Search for a Meal",
                             suffixIcon: IconButton(
-                              icon: Icon(Icons.search),
+                              icon: const Icon(Icons.search),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
@@ -227,7 +227,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       SizedBox(height: getProportionateScreenHeight(30)),
                       Container(
                         height: getProportionateScreenHeight(320),
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 10),
                         child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: listOfMeals!.length,
@@ -309,7 +309,7 @@ class MealCard extends StatelessWidget {
         //padding: EdgeInsets.all(getProportionateScreenWidth(10)),
         //height: getProportionateScreenHeight(10),
         decoration: BoxDecoration(
-          color: Color(kLightGreeColor),
+          color: const Color(kLightGreeColor),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -328,18 +328,18 @@ class MealCard extends StatelessWidget {
               width: getProportionateScreenWidth(330),
               child: Text(
                 meal.name!,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
-            Text("₦${meal.cost!.toString()}", style: TextStyle(fontSize: 20)),
+            Text("₦${meal.cost!.toString()}", style: const TextStyle(fontSize: 20)),
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
             Text("${meal.calories!.toString()} kcal",
-                style: TextStyle(fontSize: 20))
+                style: const TextStyle(fontSize: 20))
           ],
         ),
       ),

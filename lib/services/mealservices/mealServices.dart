@@ -113,6 +113,38 @@ Future<ApiResponse?> generateMealPlan(String? bearerToken, String duration, Gene
 }
 
 
+//method to re-generate meal plan
+Future<ApiResponse?> regenerateMealPlan(String? bearerToken, String duration,String index, GenerateMealPlanRequestModel model) async {
+  const String url =
+      "http://gloryiweriebor-001-site1.dtempurl.com/api/Meal/RegenerateMealPlan";
+
+  Map<String, String?> queryParams = {
+    'duration': duration,
+    'index' : index,
+  };
+
+   Map<String, String> authorizedHeaders = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ${bearerToken!}',
+  };
+
+
+  String queryString = Uri(queryParameters: queryParams).query;
+ 
+  try {
+    var response = await http.post(
+      Uri.parse("$url?$queryString"),
+      headers: authorizedHeaders,
+      body: generateMealPlanRequestModelToJson(model),
+    );
+    print(response.body);
+    var res = apiResponseFromJson(response.body);
+    return res;
+  } catch (e) {
+    print(e);
+    return null;
+  }
+}
 
 
 

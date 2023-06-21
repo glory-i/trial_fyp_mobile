@@ -55,14 +55,21 @@ class _MealScreenState extends State<MealScreen> {
                       Text(
                         meal!.name!,
                         style: TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.bold),
+                            fontSize: 28, fontWeight: FontWeight.w800),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(20),
                       ),
                       Text(
                         meal!.description!,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(20),
+                      ),
+                      Text(
+                        'Sold at : ${meal!.producer!}',
+                        style: TextStyle(fontSize: 18,  fontWeight: FontWeight.w300),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(10),
@@ -126,6 +133,9 @@ class _MealScreenState extends State<MealScreen> {
                               value: "${meal!.fat.toString()}kg",
                               imageString: fatPNG),
                         ],
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(20),
                       ),
                     ],
                   ),

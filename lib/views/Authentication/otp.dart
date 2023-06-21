@@ -30,7 +30,7 @@ class _OTPScreenState extends State<OTPScreen> {
   @override
   void initState() {
     //PLEASE DO NOT FORGET TO UNCOMMENT THIS WHEN THE TIME REACHES !!!!! ALSO THE ONE FOR RESEND CODEEEE
-    //sendOtp(validateModel.userName, validateModel.email);
+    sendOtp(validateModel.userName, validateModel.email);
     super.initState();
   }
 
@@ -130,7 +130,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   validateModel: validateModel,
                                 )));
                       }
-                      //call validate otp at the backend and pass otp
+                      // //call validate otp at the backend and pass otp
                       setState(() {
                         isLoading = true;
                       });
