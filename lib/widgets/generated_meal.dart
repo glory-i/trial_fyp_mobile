@@ -22,7 +22,6 @@ class GeneratedMeal extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ClipRRect(
-
             borderRadius: BorderRadius.circular(20),
             child: Image.network(meal.flutterImageUrl!,
                           width: getProportionateScreenWidth(100),
@@ -34,7 +33,7 @@ class GeneratedMeal extends StatelessWidget {
             children: [
               SizedBox(
                 width: getProportionateScreenWidth(200),
-                height: getProportionateScreenHeight(50),
+                height: getProportionateScreenHeight(60),
                 child: Text(
                   meal.name!,
                   style: const TextStyle(

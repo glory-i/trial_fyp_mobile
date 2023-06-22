@@ -30,6 +30,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool isLoading = true;
   MealTime? selectedMealTime;
 
+  final searchController = TextEditingController();
+  List<Meal>? listOfSearchedMeals;
+
   String availableMeals() {
     if (selectedMealTime == MealTime.breakfast) {
       return 'Breakfast';
@@ -147,14 +150,75 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       SizedBox(height: getProportionateScreenHeight(40)),
                       TextFormField(
+                        onFieldSubmitted: (value) async {
+                          if (await hasInternetConnection()) {
+                                  var apiResponse = await getSearchedMeals(
+                                      searchController.text);
+                                  if (apiResponse!.message == failure) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    showErrorSnackBar(
+                                        apiResponse.error!.message, context);
+                                  }
+                                  else{
+                                  listOfSearchedMeals = mealsFromJson(
+                                  json.encode(apiResponse.data));
+                                  }
+
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                         SearchResultsScreen(listOfSearchedMeals: listOfSearchedMeals!,
+                                         searchString: searchController.text,
+                                         )));
+
+                                } else {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  showErrorSnackBar(
+                                      "Failed to connect, Check your internet connection",
+                                      context);
+                                }
+
+                        },
+                        controller: searchController,
                         decoration: InputDecoration(
                             hintText: "Search for a Meal",
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.search),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
+                              onPressed: () async {
+                                if (await hasInternetConnection()) {
+                                  var apiResponse = await getSearchedMeals(
+                                      searchController.text);
+                                  if (apiResponse!.message == failure) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    showErrorSnackBar(
+                                        apiResponse.error!.message, context);
+                                  }
+                                  else{
+                                  listOfSearchedMeals = mealsFromJson(
+                                  json.encode(apiResponse.data));
+                                  }
+
+                                    Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                        const SearchResultsScreen()));
+                                         SearchResultsScreen(listOfSearchedMeals: listOfSearchedMeals!,
+                                         searchString: searchController.text,
+                                         )));
+
+                                } else {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  showErrorSnackBar(
+                                      "Failed to connect, Check your internet connection",
+                                      context);
+                                }
+
+
                               },
                             ),
                             border: OutlineInputBorder(
@@ -328,13 +392,15 @@ class MealCard extends StatelessWidget {
               width: getProportionateScreenWidth(330),
               child: Text(
                 meal.name!,
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
-            Text("₦${meal.cost!.toString()}", style: const TextStyle(fontSize: 20)),
+            Text("₦${meal.cost!.toString()}",
+                style: const TextStyle(fontSize: 20)),
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),

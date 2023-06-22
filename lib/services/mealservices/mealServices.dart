@@ -16,7 +16,6 @@ Map<String, String> headers = {
   'Content-Type': 'application/json',
 };
 
-
 //method to get popular breaksfasts
 Future<ApiResponse?> getPopularBreakfasts() async {
   const String url =
@@ -57,9 +56,6 @@ Future<ApiResponse?> getPopularLunches() async {
   }
 }
 
-
-
-
 //method to get popular dinners
 Future<ApiResponse?> getPopularDinner() async {
   const String url =
@@ -81,7 +77,8 @@ Future<ApiResponse?> getPopularDinner() async {
 }
 
 //method to generate meal plan
-Future<ApiResponse?> generateMealPlan(String? bearerToken, String duration, GenerateMealPlanRequestModel model) async {
+Future<ApiResponse?> generateMealPlan(String? bearerToken, String duration,
+    GenerateMealPlanRequestModel model) async {
   const String url =
       "http://gloryiweriebor-001-site1.dtempurl.com/api/Meal/GenerateMealPlan";
 
@@ -89,14 +86,13 @@ Future<ApiResponse?> generateMealPlan(String? bearerToken, String duration, Gene
     'duration': duration,
   };
 
-   Map<String, String> authorizedHeaders = {
+  Map<String, String> authorizedHeaders = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ${bearerToken!}',
   };
 
-
   String queryString = Uri(queryParameters: queryParams).query;
- 
+
   try {
     var response = await http.post(
       Uri.parse("$url?$queryString"),
@@ -112,25 +108,24 @@ Future<ApiResponse?> generateMealPlan(String? bearerToken, String duration, Gene
   }
 }
 
-
 //method to re-generate meal plan
-Future<ApiResponse?> regenerateMealPlan(String? bearerToken, String duration,String index, GenerateMealPlanRequestModel model) async {
+Future<ApiResponse?> regenerateMealPlan(String? bearerToken, String duration,
+    String index, GenerateMealPlanRequestModel model) async {
   const String url =
       "http://gloryiweriebor-001-site1.dtempurl.com/api/Meal/RegenerateMealPlan";
 
   Map<String, String?> queryParams = {
     'duration': duration,
-    'index' : index,
+    'index': index,
   };
 
-   Map<String, String> authorizedHeaders = {
+  Map<String, String> authorizedHeaders = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ${bearerToken!}',
   };
 
-
   String queryString = Uri(queryParameters: queryParams).query;
- 
+
   try {
     var response = await http.post(
       Uri.parse("$url?$queryString"),
@@ -146,20 +141,35 @@ Future<ApiResponse?> regenerateMealPlan(String? bearerToken, String duration,Str
   }
 }
 
+//method to get searched meals breaksfasts
+Future<ApiResponse?> getSearchedMeals(String? search) async {
+  Map<String, String?> queryParams = {
+    'search': search,
+  };
 
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+  };
 
+  const String url =
+      "http://gloryiweriebor-001-site1.dtempurl.com/api/Meal/SearchMeals";
 
+  String queryString = Uri(queryParameters: queryParams).query;
 
+  try {
+    var response = await http.get(
+      Uri.parse("$url?$queryString"),
+      headers: headers,
+    );
 
-
-
-
-
-
-
-
-
-
+    print(response.body);
+    var res = apiResponseFromJson(response.body);
+    return res;
+  } catch (e) {
+    print(e);
+    return null;
+  }
+}
 
 //method to get budget for a day endpoint
 Future<ApiResponse?> getBudgetForDay() async {
@@ -181,9 +191,6 @@ Future<ApiResponse?> getBudgetForDay() async {
   }
 }
 
-
-
-
 //method to get budget for a week endpoint
 Future<ApiResponse?> getBudgetForWeek() async {
   const String url =
@@ -203,7 +210,6 @@ Future<ApiResponse?> getBudgetForWeek() async {
     return null;
   }
 }
-
 
 //method to get budget for a week endpoint
 Future<ApiResponse?> getBudgetForMonth() async {
