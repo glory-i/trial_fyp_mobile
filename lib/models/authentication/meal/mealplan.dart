@@ -21,6 +21,15 @@ class MealPlan {
     double? percentCalorieFromFat;
     double? percentCalorieFromCarbs;
     double? percentCalorieFromProtein;
+    double? targetMinCost;
+    double? targetMaxCost;
+    double? targetCalories;
+    double? targetMinCarbs;
+    double? targetMaxCarbs;
+    double? targetMinProtein;
+    double? targetMaxProtein;
+    double? targetMinFat;
+    double? targetMaxFat;
 
     MealPlan({
         this.meals,
@@ -33,6 +42,15 @@ class MealPlan {
         this.percentCalorieFromFat,
         this.percentCalorieFromCarbs,
         this.percentCalorieFromProtein,
+        this.targetMinCost,
+        this.targetMaxCost,
+        this.targetCalories,
+        this.targetMinCarbs,
+        this.targetMaxCarbs,
+        this.targetMinProtein,
+        this.targetMaxProtein,
+        this.targetMinFat,
+        this.targetMaxFat,
     });
 
     factory MealPlan.fromJson(Map<String, dynamic> json) => MealPlan(
@@ -46,6 +64,15 @@ class MealPlan {
         percentCalorieFromFat: json["percentCalorieFromFat"]?.toDouble(),
         percentCalorieFromCarbs: json["percentCalorieFromCarbs"]?.toDouble(),
         percentCalorieFromProtein: json["percentCalorieFromProtein"]?.toDouble(),
+        targetMinCost: json["targetMinCost"]?.toDouble(),
+        targetMaxCost: json["targetMaxCost"]?.toDouble(),
+        targetCalories: json["targetCalories"]?.toDouble(),
+        targetMinCarbs: json["targetMinCarbs"]?.toDouble(),
+        targetMaxCarbs: json["targetMaxCarbs"]?.toDouble(),
+        targetMinProtein: json["targetMinProtein"]?.toDouble(),
+        targetMaxProtein: json["targetMaxProtein"]?.toDouble(),
+        targetMinFat: json["targetMinFat"]?.toDouble(),
+        targetMaxFat: json["targetMaxFat"]?.toDouble(),
     );
 
     Map<String, dynamic> toJson() => {
@@ -59,6 +86,15 @@ class MealPlan {
         "percentCalorieFromFat": percentCalorieFromFat,
         "percentCalorieFromCarbs": percentCalorieFromCarbs,
         "percentCalorieFromProtein": percentCalorieFromProtein,
+        "targetMinCost": targetMinCost,
+        "targetMaxCost": targetMaxCost,
+        "targetCalories": targetCalories,
+        "targetMinCarbs": targetMinCarbs,
+        "targetMaxCarbs": targetMaxCarbs,
+        "targetMinProtein": targetMinProtein,
+        "targetMaxProtein": targetMaxProtein,
+        "targetMinFat": targetMinFat,
+        "targetMaxFat": targetMaxFat,
     };
 }
 
@@ -68,7 +104,7 @@ class MealPlan {
 //     String? description;
 //     String? typeOfMeal;
 //     String? producer;
-//     double? cost;
+//     int? cost;
 //     double? calories;
 //     double? protein;
 //     double? carbs;
@@ -97,7 +133,7 @@ class MealPlan {
 //         description: json["description"],
 //         typeOfMeal: json["typeOfMeal"],
 //         producer: json["producer"],
-//         cost: json["cost"]?.toDouble(),
+//         cost: json["cost"],
 //         calories: json["calories"]?.toDouble(),
 //         protein: json["protein"]?.toDouble(),
 //         carbs: json["carbs"]?.toDouble(),

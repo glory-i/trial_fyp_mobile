@@ -37,6 +37,8 @@ class _MealScreenState extends State<MealScreen> {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
+                  
+                  width: double.infinity, //MAY COMMENT THIS OUT OO!!!
                   child: Image.network(meal!.flutterImageUrl!,
                     fit: BoxFit.cover,
                     
@@ -111,14 +113,14 @@ class _MealScreenState extends State<MealScreen> {
                         children: [
                           PictureDetails(
                               title: "Protein",
-                              value: "${meal!.protein.toString()}kg",
+                              value: "${meal!.protein.toString()}g",
                               imageString: proteinPNG),
                           SizedBox(
                             width: getProportionateScreenWidth(45),
                           ),
                           PictureDetails(
                               title: "Carbs",
-                              value: "${meal!.carbs.toString()}kg",
+                              value: "${meal!.carbs.toString()}g",
                               imageString: carbsPNG),
                         ],
                       ),
@@ -130,7 +132,7 @@ class _MealScreenState extends State<MealScreen> {
                         children: [
                           PictureDetails(
                               title: "Fat",
-                              value: "${meal!.fat.toString()}kg",
+                              value: "${meal!.fat.toString()}g",
                               imageString: fatPNG),
                         ],
                       ),

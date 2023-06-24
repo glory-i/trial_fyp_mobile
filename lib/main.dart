@@ -21,7 +21,8 @@ class _MyAppState extends State<MyApp> {
       home: const Onboarding(),
       routes: {
         Onboarding.id: (context) => const Onboarding(),
-        Login.id: (context) => const Login(),
+        //Login.id: (context) => const Login(),
+        '/loginScreen': (context) => const Login(), 
         //NutritionCalculated.id: (context) => NutritionCalculated(nutritionResponseModel: )
       },
       //home: OTP(),

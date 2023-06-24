@@ -200,6 +200,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   GestureDetector(
                     onTap: () {
                       //CALL THE LOGOUT ENDPOINT THAT YOU CREATE
+                        // Navigate back to the login screen
+                        //Navigator.popUntil(context, ModalRoute.withName('/loginScreen'));
                     },
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(
@@ -254,10 +256,13 @@ class KProfileDetails extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title!,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 23),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    title!,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 23),
+                  ),
                 ),
                 SizedBox(
                   height: getProportionateScreenHeight(5),

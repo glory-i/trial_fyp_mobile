@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
 import 'package:trial_fyp_mobile/widgets/generated_meal.dart';
@@ -43,6 +44,29 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "FOODIFIED",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 30, color: Colors.black),
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: SvgPicture.asset(
+              "assets/backbutton3.svg",
+              width: getProportionateScreenWidth(56),
+              height: getProportionateScreenHeight(51),
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
           child: SingleChildScrollView(
               child: Padding(
@@ -52,12 +76,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: getProportionateScreenHeight(10)),
-            const Center(
-              child: Text(
-                'FOODIFIED',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-            ),
+            // const Center(
+            //   child: Text(
+            //     'FOODIFIED',
+            //     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
             SizedBox(height: getProportionateScreenHeight(40)),
             TextFormField(
               controller: searchController,
@@ -124,25 +148,28 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                       borderRadius: BorderRadius.circular(20))),
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
-            Container(
-              height: getProportionateScreenHeight(700),
-              //padding: const EdgeInsets.only(bottom: 10),
-              child: ListView.separated(
-                  scrollDirection: Axis.vertical,
-                  itemCount: listOfSearchedMeals.length,
-                  separatorBuilder: (context, _) => SizedBox(
-                        width: getProportionateScreenWidth(30),
-                        child: const Divider(
-                          color: Color(kGreenColor),
-                          height: 30,
-                          thickness: 1,
+            Padding(
+              padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(20),0,getProportionateScreenWidth(0),0),
+              child: Container(
+                height: getProportionateScreenHeight(700),
+                //padding: const EdgeInsets.only(bottom: 10),
+                child: ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    itemCount: listOfSearchedMeals.length,
+                    separatorBuilder: (context, _) => SizedBox(
+                          width: getProportionateScreenWidth(30),
+                          child: const Divider(
+                            color: Color(kGreenColor),
+                            height: 30,
+                            thickness: 1,
+                          ),
                         ),
-                      ),
-                  itemBuilder: (context, index) => GeneratedMeal(
-                        meal: listOfSearchedMeals[index],
-                        onPressed: () =>
-                            moveToMealScreen(listOfSearchedMeals[index]),
-                      )),
+                    itemBuilder: (context, index) => GeneratedMeal(
+                          meal: listOfSearchedMeals[index],
+                          onPressed: () =>
+                              moveToMealScreen(listOfSearchedMeals[index]),
+                        )),
+              ),
             ),
           ],
         ),
