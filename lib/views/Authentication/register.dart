@@ -210,6 +210,7 @@ class _RegisterState extends State<Register> {
                                   color: Colors.grey,
                                 ),
                           onPressed: () {
+                            if (!mounted) return;
                             setState(() {
                               isPasswordVisible = !isPasswordVisible;
                             });
@@ -256,6 +257,7 @@ class _RegisterState extends State<Register> {
                                   color: Colors.grey,
                                 ),
                           onPressed: () {
+                            if (!mounted) return;
                             setState(() {
                               isConfirmPasswordVisible =
                                   !isConfirmPasswordVisible;
@@ -299,12 +301,12 @@ class _RegisterState extends State<Register> {
                     onTap: () async {
                       if (_formkey.currentState!.validate()) {
                         //call api to validate username, email(CheckValidations), etc. If invalid display the error message, if valid move to otp screen
+                        if (!mounted) return;
                         setState(() {
-                            isLoading = true;
-                          });
-                          
+                          isLoading = true;
+                        });
+
                         if (await hasInternetConnection()) {
-                          
                           var apiResponse = await checkValidations(
                               ValidateModel(
                                   firstName: firstNameController.text,
@@ -315,8 +317,8 @@ class _RegisterState extends State<Register> {
                                   email: emailController.text,
                                   userName: usernameController.text));
 
-                          
                           if (apiResponse!.message == failure) {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -343,8 +345,8 @@ class _RegisterState extends State<Register> {
                                 behavior: SnackBarBehavior.floating,
                                 ),
                               );*/
-
                           } else {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -359,10 +361,11 @@ class _RegisterState extends State<Register> {
                                         email: emailController.text,
                                         userName: usernameController.text))));
                           }
-                        }
-
-                        else{
-                          showErrorSnackBar("Failed to connect, Please check your connection", context);
+                        } else {
+                          showErrorSnackBar(
+                              "Failed to connect, Please check your connection",
+                              context);
+                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });

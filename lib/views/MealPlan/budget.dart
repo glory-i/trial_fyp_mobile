@@ -135,6 +135,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       items: listOfBudgets.map(buildMenuItem).toList(),
                       value: budgetRangeString,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           budgetRangeString = value as String;
                           minBudget =
@@ -166,6 +167,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         //               'Jollof Rice and Fried Rice and Moi Moi	',
                         //         )));
                         if (_formkey.currentState!.validate()) {
+                          if (!mounted) return;
                           setState(() {
                             isLoading = true;
                           });
@@ -184,6 +186,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                     minBudget: minBudget));
 
                             if (apiResponse!.message == failure) {
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });
@@ -192,6 +195,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                             } else {
                               var finalMealPlan = finalMealPlanFromJson(
                                   json.encode(apiResponse.data));
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });
@@ -202,6 +206,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                       )));
                             }
                           } else {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -211,10 +216,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                           }
 
                           //WE WILL ADD THIS ONE LATER
-                          // setState(() {
+                          //       if (!mounted) return;
+//setState(() {
                           //   isLoading = true;
                           // });
-
                         }
                       },
                       child: Padding(

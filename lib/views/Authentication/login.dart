@@ -135,6 +135,7 @@ class _LoginState extends State<Login> {
                                   color: Colors.grey,
                                 ),
                           onPressed: () {
+                            if (!mounted) return;
                             setState(() {
                               isPasswordVisible = !isPasswordVisible;
                             });
@@ -189,6 +190,7 @@ class _LoginState extends State<Login> {
                       //     builder: (context) => const Home()));
 
                       if (_formkey.currentState!.validate()) {
+                        if (!mounted) return;
                         setState(() {
                           isLoading = true;
                         });
@@ -201,6 +203,7 @@ class _LoginState extends State<Login> {
                               password: passwordController.text));
 
                           if (apiResponse!.message == failure) {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -217,9 +220,11 @@ class _LoginState extends State<Login> {
                             //getToken();
 
                             //store the whole loginresponse model in flutter secure storage
-                            storeLoginResponse(loginResponseModelToJson(loginResponseModel));
+                            storeLoginResponse(
+                                loginResponseModelToJson(loginResponseModel));
                             //getLoginResponse();
 
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -230,9 +235,9 @@ class _LoginState extends State<Login> {
                                 builder: (context) => const Home()));
 
                             //PUSH TO HOME SCREEN IF LOGIN SUCCESSFUL
-
                           }
                         } else {
+                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });
@@ -302,4 +307,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-

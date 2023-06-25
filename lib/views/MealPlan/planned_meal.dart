@@ -9,17 +9,16 @@ import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 import '../../models/authentication/meal/finalmealplan.dart';
 
 class PlannedMeal extends StatefulWidget {
-
   late FinalMealPlan finalMealPlan;
   late String? duration;
   PlannedMeal({super.key, required this.finalMealPlan, required this.duration});
 
   @override
-  State<PlannedMeal> createState() => _PlannedMealState(finalMealPlan, duration );
+  State<PlannedMeal> createState() =>
+      _PlannedMealState(finalMealPlan, duration);
 }
 
 class _PlannedMealState extends State<PlannedMeal> {
-  
   late FinalMealPlan finalMealPlan;
   late String? duration;
   _PlannedMealState(this.finalMealPlan, this.duration);
@@ -42,23 +41,28 @@ class _PlannedMealState extends State<PlannedMeal> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
-                onTap: currentIndex == 0 ? null :() {
-                  _pageController.previousPage(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.easeIn);
-                  setState(() {
-                    currentDay--;
-                  });
-                },
-                child: currentIndex == 0?SvgPicture.asset(
-                  "assets/group53.svg",
-                  width: getProportionateScreenWidth(56),
-                  height: getProportionateScreenHeight(51),
-                ) :SvgPicture.asset(
-                  "assets/backButton4.svg",
-                  width: getProportionateScreenWidth(56),
-                  height: getProportionateScreenHeight(51),
-                ),
+                onTap: currentIndex == 0
+                    ? null
+                    : () {
+                        _pageController.previousPage(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeIn);
+                        if (!mounted) return;
+                        setState(() {
+                          currentDay--;
+                        });
+                      },
+                child: currentIndex == 0
+                    ? SvgPicture.asset(
+                        "assets/group53.svg",
+                        width: getProportionateScreenWidth(56),
+                        height: getProportionateScreenHeight(51),
+                      )
+                    : SvgPicture.asset(
+                        "assets/backButton4.svg",
+                        width: getProportionateScreenWidth(56),
+                        height: getProportionateScreenHeight(51),
+                      ),
               ),
               Text(
                 'Day $currentDay',
@@ -68,25 +72,30 @@ class _PlannedMealState extends State<PlannedMeal> {
                     color: Colors.black),
               ),
               GestureDetector(
-                onTap: currentIndex == finalMealPlan.mealPlans!.length-1 ? null:() {
-                  _pageController.nextPage(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.easeIn);
-                  setState(() {
-                    currentDay++;
-                  });
-                  print(finalMealPlan.mealPlans!.length);
-                  print(currentIndex);
-                },
-                child: currentIndex == finalMealPlan.mealPlans!.length-1 ?SvgPicture.asset(
-                  "assets/group54.svg",
-                  width: getProportionateScreenWidth(56),
-                  height: getProportionateScreenHeight(51),
-                ) :SvgPicture.asset(
-                  "assets/forwardButton.svg",
-                  width: getProportionateScreenWidth(56),
-                  height: getProportionateScreenHeight(51),
-                ),
+                onTap: currentIndex == finalMealPlan.mealPlans!.length - 1
+                    ? null
+                    : () {
+                        _pageController.nextPage(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeIn);
+                        if (!mounted) return;
+                        setState(() {
+                          currentDay++;
+                        });
+                        print(finalMealPlan.mealPlans!.length);
+                        print(currentIndex);
+                      },
+                child: currentIndex == finalMealPlan.mealPlans!.length - 1
+                    ? SvgPicture.asset(
+                        "assets/group54.svg",
+                        width: getProportionateScreenWidth(56),
+                        height: getProportionateScreenHeight(51),
+                      )
+                    : SvgPicture.asset(
+                        "assets/forwardButton.svg",
+                        width: getProportionateScreenWidth(56),
+                        height: getProportionateScreenHeight(51),
+                      ),
               ),
             ],
           ),
@@ -102,6 +111,7 @@ class _PlannedMealState extends State<PlannedMeal> {
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (index) {
+                  if (!mounted) return;
                   setState(() {
                     currentIndex = index;
                   });
@@ -126,7 +136,6 @@ class _PlannedMealState extends State<PlannedMeal> {
                         GeneratedMeal(
                           onPressed: () {},
                           meal: finalMealPlan.mealPlans![index].meals![0],
-                          
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -146,9 +155,7 @@ class _PlannedMealState extends State<PlannedMeal> {
                         ),
                         GeneratedMeal(
                           onPressed: () {},
-
                           meal: finalMealPlan.mealPlans![index].meals![1],
-                          
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -169,7 +176,6 @@ class _PlannedMealState extends State<PlannedMeal> {
                         GeneratedMeal(
                           onPressed: () {},
                           meal: finalMealPlan.mealPlans![index].meals![2],
-                          
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -192,7 +198,8 @@ class _PlannedMealState extends State<PlannedMeal> {
                         TotalsCard(
                           image: 'assets/caloriesImg.png',
                           totalName: 'Calories',
-                          totalCalculation: '${finalMealPlan.mealPlans![index].totalCalories.toString()}kcal',
+                          totalCalculation:
+                              '${finalMealPlan.mealPlans![index].totalCalories.toString()}kcal',
                           color: 0xFF000000,
                         ),
                         const Divider(
@@ -200,14 +207,15 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: 30,
                           thickness: 1,
                         ),
-                        
+
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Carbs
                         TotalsCard(
                           image: 'assets/carbo.png',
                           totalName: 'Carbs',
-                          totalCalculation: '${finalMealPlan.mealPlans![index].totalCarbs.toString()}kg',
+                          totalCalculation:
+                              '${finalMealPlan.mealPlans![index].totalCarbs.toString()}kg',
                           color: kErrorColor,
                         ),
                         const Divider(
@@ -215,14 +223,15 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: 30,
                           thickness: 1,
                         ),
-                        
+
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Protein
                         TotalsCard(
                           image: 'assets/proteinss.png',
                           totalName: 'Protein',
-                          totalCalculation: '${finalMealPlan.mealPlans![index].totalProtein.toString()}kg',
+                          totalCalculation:
+                              '${finalMealPlan.mealPlans![index].totalProtein.toString()}kg',
                           color: kGreenColor,
                         ),
                         const Divider(
@@ -230,14 +239,15 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: 30,
                           thickness: 1,
                         ),
-                        
+
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Fat
                         TotalsCard(
                           image: 'assets/fat.png',
                           totalName: 'Fats',
-                          totalCalculation: '${finalMealPlan.mealPlans![index].totalFat.toString()}kg',
+                          totalCalculation:
+                              '${finalMealPlan.mealPlans![index].totalFat.toString()}kg',
                           color: kBlueColor,
                         ),
                         const Divider(
@@ -245,14 +255,15 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: 30,
                           thickness: 1,
                         ),
-                        
+
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Cost
                         TotalsCard(
                           image: 'assets/cost.png',
                           totalName: 'Cost',
-                          totalCalculation: '₦${finalMealPlan.mealPlans![index].totalCost.toString()}',
+                          totalCalculation:
+                              '₦${finalMealPlan.mealPlans![index].totalCost.toString()}',
                           color: 0xFF000000,
                         ),
                         const Divider(
@@ -260,7 +271,7 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: 30,
                           thickness: 1,
                         ),
-                        
+
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Pie Chart
@@ -274,25 +285,28 @@ class _PlannedMealState extends State<PlannedMeal> {
                         SizedBox(height: getProportionateScreenHeight(20)),
                         PieChart(
                           dataMap: {
-                            "Protein": finalMealPlan.mealPlans![index].percentCalorieFromProtein!,
-                            "Fat": finalMealPlan.mealPlans![index].percentCalorieFromFat!,
-                            "Carbs": finalMealPlan.mealPlans![index].percentCalorieFromCarbs!,
+                            "Protein": finalMealPlan
+                                .mealPlans![index].percentCalorieFromProtein!,
+                            "Fat": finalMealPlan
+                                .mealPlans![index].percentCalorieFromFat!,
+                            "Carbs": finalMealPlan
+                                .mealPlans![index].percentCalorieFromCarbs!,
                           },
                           colorList: const [
-                          Color(kGreenColor),
-                          Color(kBlueColor),
-                          Color(kErrorColor),
-                        ],
-                        legendOptions: const LegendOptions(
-                            legendTextStyle: TextStyle(fontSize: 20)),
-                        chartValuesOptions: const ChartValuesOptions(
-                            decimalPlaces: 0,
-                            showChartValuesInPercentage: true,
-                            showChartValueBackground: false,
-                            chartValueStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold)),
+                            Color(kGreenColor),
+                            Color(kBlueColor),
+                            Color(kErrorColor),
+                          ],
+                          legendOptions: const LegendOptions(
+                              legendTextStyle: TextStyle(fontSize: 20)),
+                          chartValuesOptions: const ChartValuesOptions(
+                              decimalPlaces: 0,
+                              showChartValuesInPercentage: true,
+                              showChartValueBackground: false,
+                              chartValueStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold)),
                         ),
                         SizedBox(height: getProportionateScreenHeight(50)),
                         FPrimaryButton(text: 'Regenerate')

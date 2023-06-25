@@ -58,7 +58,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           clipBehavior: Clip.none,
           children: [
             Form(
-            key: _formkey,
+              key: _formkey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -73,15 +73,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         getProportionateScreenWidth(30), 0, 0, 0),
                     child: const Text(
                       "Enter your Email",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
                     height: getProportionateScreenHeight(10),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(30),
-                        0, getProportionateScreenWidth(30), 0),
+                    padding: EdgeInsets.fromLTRB(
+                        getProportionateScreenWidth(30),
+                        0,
+                        getProportionateScreenWidth(30),
+                        0),
                     child: TextFormField(
                       validator: (String? value) {
                         if (value!.isEmpty) {
@@ -92,6 +96,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       controller: userEmailController,
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           userEmail = (value);
                         });
@@ -110,39 +115,47 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     height: getProportionateScreenHeight(40),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(100),
-                        0, getProportionateScreenWidth(100), 0),
+                    padding: EdgeInsets.fromLTRB(
+                        getProportionateScreenWidth(100),
+                        0,
+                        getProportionateScreenWidth(100),
+                        0),
                     child: GestureDetector(
-                      child: isLoading? const FLoadingScreen(): const FPrimaryButton(text: "NEXT"),
+                      child: isLoading
+                          ? const FLoadingScreen()
+                          : const FPrimaryButton(text: "NEXT"),
                       onTap: () async {
                         if (_formkey.currentState!.validate()) {
+                          if (!mounted) return;
                           setState(() {
                             isLoading = true;
                           });
-                        if(await hasInternetConnection()){
-                          var apiResponse = await validateUserExists(userEmail);
-                          if(apiResponse!.message == failure){
-                            setState(() {
-                              isLoading = false;
-                            });
-                            showErrorSnackBar(apiResponse.error!.message, context);
-                          }
-                          else{
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ForgotPasswordOTP(email: userEmail!,)));
-        
+                          if (await hasInternetConnection()) {
+                            var apiResponse =
+                                await validateUserExists(userEmail);
+                            if (apiResponse!.message == failure) {
+                              if (!mounted) return;
+                              setState(() {
+                                isLoading = false;
+                              });
+                              showErrorSnackBar(
+                                  apiResponse.error!.message, context);
+                            } else {
+                              if (!mounted) return;
+                              setState(() {
+                                isLoading = false;
+                              });
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordOTP(
+                                        email: userEmail!,
+                                      )));
+                            }
+                          } else {
+                            showErrorSnackBar(
+                                "Failed to connect, check your internet connection",
+                                context);
                           }
                         }
-
-                        else{
-                          showErrorSnackBar("Failed to connect, check your internet connection", context);
-                        }
-                        
-                      }
-
                       },
                     ),
                   )
