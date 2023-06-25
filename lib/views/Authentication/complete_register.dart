@@ -48,6 +48,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   void updateButtonState() {
+    if (!mounted) return;
     setState(() {
       if (_formkey.currentState!.validate()) {
         isCheckboxEnabled = true;
@@ -132,6 +133,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                       items: listOfAges.map(buildMenuItem).toList(),
                       value: ageString,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           ageString = value as String;
                           age = int.parse(ageString!);
@@ -180,6 +182,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                       items: listOfGenders.map(buildMenuItem).toList(),
                       value: gender,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           gender = value as String;
                           updateButtonState();
@@ -225,6 +228,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                             FilteringTextInputFormatter.allow(RegExp('[0-9]'))
                           ],
                           onChanged: (value) {
+                            if (!mounted) return;
                             setState(() {
                               //WE NEED TO CHANGE THIS
                               if (value.isNotEmpty) {
@@ -296,6 +300,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                         items: listOfFeet.map(buildMenuItem).toList(),
                         value: feetString,
                         onChanged: (value) {
+                          if (!mounted) return;
                           setState(() {
                             feetString = value as String;
                             feet = double.parse(feetString!);
@@ -338,6 +343,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                         items: listOfInches.map(buildMenuItem).toList(),
                         value: inchesString,
                         onChanged: (value) {
+                          if (!mounted) return;
                           setState(() {
                             inchesString = value as String;
                             inches = double.parse(inchesString!);
@@ -392,6 +398,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                       items: listOfActivityLevels.map(buildMenuItem).toList(),
                       value: activityLevel,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           activityLevel = value as String;
                           updateButtonState();
@@ -439,6 +446,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                       items: listOfGoals.map(buildMenuItem).toList(),
                       value: goal,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           goal = value as String;
                           updateButtonState();
@@ -465,6 +473,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                             value: isAgreed,
                             onChanged: isCheckboxEnabled
                                 ? (bool? value) {
+                                    if (!mounted) return;
                                     setState(() {
                                       isAgreed = value!;
                                     });
@@ -493,6 +502,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                   child: GestureDetector(
                     onTap: isAgreed == true
                         ? () async {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = true;
                             });
@@ -516,12 +526,14 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                                   heightInInches: inches,
                                   weight: weight));
                               if (apiResponse!.message == failure) {
+                                if (!mounted) return;
                                 setState(() {
                                   isLoading = false;
                                 });
                                 showErrorSnackBar(
                                     apiResponse.error!.message, context);
                               } else {
+                                if (!mounted) return;
                                 setState(() {
                                   isLoading = false;
                                 });
@@ -535,6 +547,7 @@ class _CompleteRegisterState extends State<CompleteRegister> {
                                 //PUSH TO LOGIN
                               }
                             } else {
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });

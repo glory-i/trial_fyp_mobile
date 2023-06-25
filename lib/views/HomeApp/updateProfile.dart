@@ -130,6 +130,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       items: listOfAges.map(buildMenuItem).toList(),
                       value: ageString,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           ageString = value as String;
                           age = int.parse(ageString!);
@@ -178,6 +179,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               FilteringTextInputFormatter.allow(RegExp('[0-9]'))
                             ],
                             onChanged: (value) {
+                              if (!mounted) return;
                               setState(() {
                                 //WE NEED TO CHANGE THIS
                                 if (value.isNotEmpty) {
@@ -249,6 +251,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           items: listOfFeet.map(buildMenuItem).toList(),
                           value: feetString,
                           onChanged: (value) {
+                            if (!mounted) return;
                             setState(() {
                               feetString = value as String;
                               feet = double.parse(feetString!);
@@ -291,6 +294,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           items: listOfInches.map(buildMenuItem).toList(),
                           value: inchesString,
                           onChanged: (value) {
+                            if (!mounted) return;
                             setState(() {
                               inchesString = value as String;
                               inches = double.parse(inchesString!);
@@ -346,6 +350,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         items: listOfActivityLevels.map(buildMenuItem).toList(),
                         value: activityLevel,
                         onChanged: (value) {
+                          if (!mounted) return;
                           setState(() {
                             activityLevel = value as String;
                             //updateButtonState();
@@ -394,6 +399,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         items: listOfGoals.map(buildMenuItem).toList(),
                         value: goal,
                         onChanged: (value) {
+                          if (!mounted) return;
                           setState(() {
                             goal = value as String;
                             //updateButtonState();
@@ -408,6 +414,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   GestureDetector(
                     onTap: () async {
                       if (_formkey.currentState!.validate()) {
+                        if (!mounted) return;
                         setState(() {
                           isLoading = true;
                         });
@@ -424,12 +431,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   weight: weight));
 
                           if (apiResponse!.message == failure) {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
                             showErrorSnackBar(
                                 apiResponse.error!.message, context);
                           } else {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -437,6 +446,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 "Successfully Updated Account", context);
                           }
                         } else {
+                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });
@@ -456,7 +466,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           0,
                           getProportionateScreenWidth(80),
                           0),
-                      child: isLoading? const FLoadingScreen() : const FPrimaryButton(text: "Save Changes"),
+                      child: isLoading
+                          ? const FLoadingScreen()
+                          : const FPrimaryButton(text: "Save Changes"),
                     ),
                   ),
                   SizedBox(

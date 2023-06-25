@@ -9,18 +9,15 @@ import '../../widgets/primary_button.dart';
 import 'authentication.dart';
 
 class ChangePassword extends StatefulWidget {
-
   ChangePassword({super.key, required this.email});
   late String email;
   static const id = "/forgotPasswordScreen3";
-
 
   @override
   State<ChangePassword> createState() => _ChangePasswordState(email);
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-  
   late String email;
   String? newPassword;
   String? confirmNewPassword;
@@ -106,6 +103,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       controller: newPasswordController,
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) {
+                        if (!mounted) return;
                         setState(() {
                           newPassword = (value);
                         });
@@ -123,6 +121,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     color: Colors.grey,
                                   ),
                             onPressed: () {
+                              if (!mounted) return;
                               setState(() {
                                 isnewPasswordVisible = !isnewPasswordVisible;
                               });
@@ -158,19 +157,20 @@ class _ChangePasswordState extends State<ChangePassword> {
                         0),
                     child: TextFormField(
                       validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return "Please Enter Confirm Password";
-                      }
-                      if (newPasswordController.text !=
-                          confirmNewPasswordController.text) {
-                        return "New Passord and Confirm Password do not match";
-                      }
-                      return null;
-                    },
+                        if (value!.isEmpty) {
+                          return "Please Enter Confirm Password";
+                        }
+                        if (newPasswordController.text !=
+                            confirmNewPasswordController.text) {
+                          return "New Passord and Confirm Password do not match";
+                        }
+                        return null;
+                      },
                       obscureText: !isConfirmNewPasswordVisible,
                       controller: confirmNewPasswordController,
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (confirmValue) {
+                        if (!mounted) return;
                         setState(() {
                           confirmNewPassword = (confirmValue);
                         });
@@ -188,6 +188,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     color: Colors.grey,
                                   ),
                             onPressed: () {
+                              if (!mounted) return;
                               setState(() {
                                 isConfirmNewPasswordVisible =
                                     !isConfirmNewPasswordVisible;
@@ -211,49 +212,52 @@ class _ChangePasswordState extends State<ChangePassword> {
                         getProportionateScreenWidth(100),
                         0),
                     child: GestureDetector(
-                      child: isLoading? const FLoadingScreen(): const FPrimaryButton(text: "NEXT"),
+                      child: isLoading
+                          ? const FLoadingScreen()
+                          : const FPrimaryButton(text: "NEXT"),
                       onTap: () async {
-                        if(_formkey.currentState!.validate()){
+                        if (_formkey.currentState!.validate()) {
+                          if (!mounted) return;
                           setState(() {
-                              isLoading = true;
-                            });
+                            isLoading = true;
+                          });
 
-                            if (await hasInternetConnection()) {
-                              //push to home page OR LOGIN PAGE after creating the account
+                          if (await hasInternetConnection()) {
+                            //push to home page OR LOGIN PAGE after creating the account
 
-                              var apiResponse = await forgotPassword(email, newPassword, confirmNewPassword);
-                              if (apiResponse!.message == failure) {
-                                setState(() {
-                                  isLoading = false;
-                                });
-                                showErrorSnackBar(
-                                    apiResponse.error!.message, context);
-                              } else {
-                                setState(() {
-                                  isLoading = false;
-                                });
-
-                                showSuccessSnackBar("Successfully Changed Password",context);
-                                Navigator.of(context).pushNamedAndRemoveUntil('/loginScreen', ModalRoute.withName('/onboardingScreen'));
-
-                                
-
-                                //PUSH TO LOGIN
-                              }
-                            }
-                            else{
+                            var apiResponse = await forgotPassword(
+                                email, newPassword, confirmNewPassword);
+                            if (apiResponse!.message == failure) {
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });
-                              showErrorSnackBar("Failed to connect, Check your internet connection", context);
+                              showErrorSnackBar(
+                                  apiResponse.error!.message, context);
+                            } else {
+                              if (!mounted) return;
+                              setState(() {
+                                isLoading = false;
+                              });
+
+                              showSuccessSnackBar(
+                                  "Successfully Changed Password", context);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/loginScreen',
+                                  ModalRoute.withName('/onboardingScreen'));
+
+                              //PUSH TO LOGIN
                             }
-
-
+                          } else {
+                            if (!mounted) return;
+                            setState(() {
+                              isLoading = false;
+                            });
+                            showErrorSnackBar(
+                                "Failed to connect, Check your internet connection",
+                                context);
+                          }
                         }
-
-
-                        
-
 
                         // //after changing password, go to login page
                         // print(newPassword);

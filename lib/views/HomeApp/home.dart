@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trial_fyp_mobile/services/authenticationServices/authenticationServices.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/views/HomeApp/dashboard.dart';
 import 'package:trial_fyp_mobile/views/HomeApp/profile.dart';
@@ -16,6 +17,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+    willPop = false;
+  }
+
   int currentIndex = 0;
   final screens = [
     DashboardScreen(),
@@ -24,6 +31,7 @@ class _HomeState extends State<Home> {
     ProfileScreen(),
   ];
 
+  bool willPop = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +56,7 @@ class _HomeState extends State<Home> {
             elevation: 0,
             currentIndex: currentIndex,
             onTap: (index) {
+              if (!mounted) return;
               setState(() {
                 currentIndex = index;
               });
