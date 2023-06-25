@@ -203,6 +203,13 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                   builder: (context) => PlannedMeal(
                                         duration: duration,
                                         finalMealPlan: finalMealPlan,
+                                        generateMealPlanRequestModel:
+                                            GenerateMealPlanRequestModel(
+                                                calorieRequirements:
+                                                    loginResponseModel
+                                                        .calorieRequirement,
+                                                maxBudget: maxBudget,
+                                                minBudget: minBudget),
                                       )));
                             }
                           } else {

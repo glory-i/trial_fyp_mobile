@@ -200,6 +200,11 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               height: getProportionateScreenHeight(55),
                               width: SizeConfig.screenWidth! * 0.5,
                               child: TextFormField(
+                                autovalidateMode: AutovalidateMode.onUserInteraction, //WE MAY NEED TO COMMENT THIS OUR O
+                                onSaved: (value){
+                                  print(value);
+
+                                },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "Please enter a value";
@@ -360,6 +365,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           borderRadius: BorderRadius.circular(40),
                         ),
                         child: DropdownButtonFormField2(
+                          
                           //underline: SizedBox(),
                           validator: (value) {
                             if (value == null) {

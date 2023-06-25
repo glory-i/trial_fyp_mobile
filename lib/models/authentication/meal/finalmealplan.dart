@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'meal.dart';
+import 'mealplan.dart';
 
 FinalMealPlan finalMealPlanFromJson(String str) => FinalMealPlan.fromJson(json.decode(str));
 
@@ -26,57 +27,57 @@ class FinalMealPlan {
     };
 }
 
-class MealPlan {
-    List<Meal>? meals;
-    double? fitness;
-    double? totalCalories;
-    double? totalCarbs;
-    double? totalProtein;
-    double? totalFat;
-    double? totalCost;
-    double? percentCalorieFromFat;
-    double? percentCalorieFromCarbs;
-    double? percentCalorieFromProtein;
+// class MealPlan {
+//     List<Meal>? meals;
+//     double? fitness;
+//     double? totalCalories;
+//     double? totalCarbs;
+//     double? totalProtein;
+//     double? totalFat;
+//     double? totalCost;
+//     double? percentCalorieFromFat;
+//     double? percentCalorieFromCarbs;
+//     double? percentCalorieFromProtein;
 
-    MealPlan({
-        this.meals,
-        this.fitness,
-        this.totalCalories,
-        this.totalCarbs,
-        this.totalProtein,
-        this.totalFat,
-        this.totalCost,
-        this.percentCalorieFromFat,
-        this.percentCalorieFromCarbs,
-        this.percentCalorieFromProtein,
-    });
+//     MealPlan({
+//         this.meals,
+//         this.fitness,
+//         this.totalCalories,
+//         this.totalCarbs,
+//         this.totalProtein,
+//         this.totalFat,
+//         this.totalCost,
+//         this.percentCalorieFromFat,
+//         this.percentCalorieFromCarbs,
+//         this.percentCalorieFromProtein,
+//     });
 
-    factory MealPlan.fromJson(Map<String, dynamic> json) => MealPlan(
-        meals: json["meals"] == null ? [] : List<Meal>.from(json["meals"]!.map((x) => Meal.fromJson(x))),
-        fitness: json["fitness"]?.toDouble(),
-        totalCalories: json["totalCalories"]?.toDouble(),
-        totalCarbs: json["totalCarbs"]?.toDouble(),
-        totalProtein: json["totalProtein"]?.toDouble(),
-        totalFat: json["totalFat"]?.toDouble(),
-        totalCost: json["totalCost"]?.toDouble(),
-        percentCalorieFromFat: json["percentCalorieFromFat"]?.toDouble(),
-        percentCalorieFromCarbs: json["percentCalorieFromCarbs"]?.toDouble(),
-        percentCalorieFromProtein: json["percentCalorieFromProtein"]?.toDouble(),
-    );
+//     factory MealPlan.fromJson(Map<String, dynamic> json) => MealPlan(
+//         meals: json["meals"] == null ? [] : List<Meal>.from(json["meals"]!.map((x) => Meal.fromJson(x))),
+//         fitness: json["fitness"]?.toDouble(),
+//         totalCalories: json["totalCalories"]?.toDouble(),
+//         totalCarbs: json["totalCarbs"]?.toDouble(),
+//         totalProtein: json["totalProtein"]?.toDouble(),
+//         totalFat: json["totalFat"]?.toDouble(),
+//         totalCost: json["totalCost"]?.toDouble(),
+//         percentCalorieFromFat: json["percentCalorieFromFat"]?.toDouble(),
+//         percentCalorieFromCarbs: json["percentCalorieFromCarbs"]?.toDouble(),
+//         percentCalorieFromProtein: json["percentCalorieFromProtein"]?.toDouble(),
+//     );
 
-    Map<String, dynamic> toJson() => {
-        "meals": meals == null ? [] : List<dynamic>.from(meals!.map((x) => x.toJson())),
-        "fitness": fitness,
-        "totalCalories": totalCalories,
-        "totalCarbs": totalCarbs,
-        "totalProtein": totalProtein,
-        "totalFat": totalFat,
-        "totalCost": totalCost,
-        "percentCalorieFromFat": percentCalorieFromFat,
-        "percentCalorieFromCarbs": percentCalorieFromCarbs,
-        "percentCalorieFromProtein": percentCalorieFromProtein,
-    };
-}
+//     Map<String, dynamic> toJson() => {
+//         "meals": meals == null ? [] : List<dynamic>.from(meals!.map((x) => x.toJson())),
+//         "fitness": fitness,
+//         "totalCalories": totalCalories,
+//         "totalCarbs": totalCarbs,
+//         "totalProtein": totalProtein,
+//         "totalFat": totalFat,
+//         "totalCost": totalCost,
+//         "percentCalorieFromFat": percentCalorieFromFat,
+//         "percentCalorieFromCarbs": percentCalorieFromCarbs,
+//         "percentCalorieFromProtein": percentCalorieFromProtein,
+//     };
+// }
 
 // class Meal {
 //     int? id;

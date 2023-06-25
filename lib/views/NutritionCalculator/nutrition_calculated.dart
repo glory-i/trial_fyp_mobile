@@ -26,8 +26,8 @@ class _NutritionCalculatedState extends State<NutritionCalculated> {
   Widget build(BuildContext context) {
     Map<String, double> dataMap = {
       "Protein": 30,
-      "Carbs": 30,
-      "Fat": 40,
+      "Carbs": 50,
+      "Fat": 20,
     };
     return Scaffold(
       backgroundColor: Colors.white,
