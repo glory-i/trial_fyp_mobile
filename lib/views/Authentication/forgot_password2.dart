@@ -93,7 +93,6 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     onCompleted: (value) {
-                      if (!mounted) return;
                       setState(() {
                         otp = int.parse(value);
                       });
@@ -123,9 +122,16 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                       horizontal: getProportionateScreenWidth(80)),
                   child: GestureDetector(
                     onTap: () async {
+                      //REMEBER TO REMOVE THIS RUBBISH OOO!!!!!!
+                      // if (otp == 11111) {
+                      //   Navigator.of(context).push(MaterialPageRoute(
+                      //       builder: (context) => ChangePassword(
+                      //             email: email,
+                      //           )));
+                      // }
+                      // //call validate otp at the backend and pass otp
                       //call validate otp at the backend and pass otp
                       //go to change password screen
-                      if (!mounted) return;
                       setState(() {
                         isLoading = true;
                       });
@@ -133,14 +139,12 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                         var apiResponse =
                             await validateOtp(otp.toString(), email, email);
                         if (apiResponse!.message == failure) {
-                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });
                           showErrorSnackBar(
                               apiResponse.error!.message, context);
                         } else {
-                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });
@@ -153,7 +157,6 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                         showErrorSnackBar(
                             "Failed to connect, Please check your connection",
                             context);
-                        if (!mounted) return;
                         setState(() {
                           isLoading = false;
                         });
@@ -178,7 +181,6 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                   onPressed: () async {
 //call the send email endpoint again
                     //PLEASEEE DO NOT FORGET TO UN COMMENT THIS ENDPOINT WHEN THE TIME SHOULD REACH
-                    if (!mounted) return;
                     setState(() {
                       isLoading = true;
                     });
@@ -186,20 +188,17 @@ class _ForgotPasswordOTPState extends State<ForgotPasswordOTP> {
                     if (await hasInternetConnection()) {
                       var apiResponse = await sendOtp(email, email);
                       if (apiResponse!.message == failure) {
-                        if (!mounted) return;
                         setState(() {
                           isLoading = false;
                         });
                         showErrorSnackBar(apiResponse.error!.message, context);
                       } else {
-                        if (!mounted) return;
                         setState(() {
                           isLoading = false;
                         });
                         showSuccessSnackBar("OTP has been resent", context);
                       }
                     } else {
-                      if (!mounted) return;
                       setState(() {
                         isLoading = false;
                       });

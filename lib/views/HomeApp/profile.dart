@@ -1,13 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trial_fyp_mobile/models/authentication/applicationUser.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
-import 'package:trial_fyp_mobile/views/Authentication/authentication.dart';
-import 'package:trial_fyp_mobile/views/HomeApp/dashboard.dart';
-import 'package:trial_fyp_mobile/views/HomeApp/home.dart';
 import 'package:trial_fyp_mobile/views/HomeApp/updateProfile.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
@@ -39,21 +35,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var apiResponse = await viewUser(await getToken());
 
       if (apiResponse!.message == failure) {
-        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
         showErrorSnackBar(apiResponse.error!.message, context);
-      } else {
-        applicationUser =
-            applicationUserFromJson(json.encode(apiResponse.data));
-        if (!mounted) return;
+      }
+      else{
+        applicationUser = applicationUserFromJson(json.encode(apiResponse.data));
         setState(() {
           isLoading = false;
         });
       }
+
     } else {
-      if (!mounted) return;
       setState(() {
         isLoading = false;
       });
@@ -64,192 +58,171 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) {
-          return Home();
-        }), (r) => false);
-        return true;
-      },
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          toolbarHeight: 50,
-          actions: [
-            GestureDetector(
-              onTap: () {
-                ////send to update profile screen
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UpdateProfileScreen(
-                          applicationUser: applicationUser!,
-                        )));
-              },
-              child: Container(
-                margin: EdgeInsets.only(
-                    top: getProportionateScreenHeight(10),
-                    right: getProportionateScreenWidth(10)),
-                padding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenWidth(20),
-                    vertical: getProportionateScreenHeight(0)),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(17),
-                  color: const Color(kSecondaryBackgroundColor),
-                ),
-                child: const Center(
-                    child: Text(
-                  "EDIT",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                )),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 50,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              ////send to update profile screen
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UpdateProfileScreen(applicationUser: applicationUser!,)));
+            },
+            child: Container(
+              margin: EdgeInsets.only(
+                  top: getProportionateScreenHeight(10),
+                  right: getProportionateScreenWidth(10)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(20),
+                  vertical: getProportionateScreenHeight(0)),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(17),
+                color: const Color(kSecondaryBackgroundColor),
               ),
-            )
-          ],
-        ),
-        body: Column(
-          children: [
-            Stack(
-              children: [
-                SvgPicture.asset(
-                  "assets/Ellipse18.svg",
+              child: const Center(
+                  child: Text(
+                "EDIT",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              )),
+            ),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          Stack(
+            children: [
+              SvgPicture.asset(
+                "assets/Ellipse18.svg",
+              ),
+              Positioned(
+                left: getProportionateScreenWidth(149),
+                top: getProportionateScreenHeight(106),
+                child: SvgPicture.asset(
+                  "assets/avatar.svg",
                 ),
-                Positioned(
-                  left: getProportionateScreenWidth(149),
-                  top: getProportionateScreenHeight(106),
-                  child: SvgPicture.asset(
-                    "assets/avatar.svg",
+              )
+            ],
+          ),
+          Text(
+            isLoading
+                ? " "
+                : "${applicationUser!.firstName} ${applicationUser!.lastName}",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          ),
+          SizedBox(
+            height: getProportionateScreenHeight(10),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  KProfileDetails(
+                      title: "Email",
+                      value: isLoading ? " " : "${applicationUser!.email}",
+                      imageString: "assets/email.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
                   ),
-                )
-              ],
-            ),
-            Text(
-              isLoading
-                  ? " "
-                  : "${applicationUser!.firstName} ${applicationUser!.lastName}",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-            ),
-            SizedBox(
-              height: getProportionateScreenHeight(10),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    KProfileDetails(
-                        title: "Email",
-                        value: isLoading ? " " : "${applicationUser!.email}",
-                        imageString: "assets/email.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
+                  KProfileDetails(
+                      title: "Username",
+                      value:
+                          isLoading ? " " : "${applicationUser!.userName}",
+                      imageString: "assets/usernameicon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Gender",
+                      value: isLoading ? " " : "${applicationUser!.gender}",
+                      imageString: "assets/gendericon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Age",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.age.toString()}",
+                      imageString: "assets/ageicon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Weight",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.weight.toString()} kg",
+                      imageString: "assets/weight2.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Height",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.heightInCm.toString()} cm",
+                      imageString: "assets/heighticon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Activity Level",
+                      value: isLoading
+                          ? " "
+                          : "${applicationUser!.userActivityLevel}",
+                      imageString: "assets/activity.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  KProfileDetails(
+                      title: "Goal",
+                      value: isLoading ? " " : "${applicationUser!.goal}",
+                      imageString: "assets/newgoalicon.svg"),
+                  const Divider(
+                    color: Color(kPrimaryBackgroundColor),
+                    thickness: 3,
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(20),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //CALL THE LOGOUT ENDPOINT THAT YOU CREATE
+                        // Navigate back to the login screen
+                        //Navigator.popUntil(context, ModalRoute.withName('/loginScreen'));
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          getProportionateScreenWidth(80),
+                          0,
+                          getProportionateScreenWidth(80),
+                          0),
+                      child: const FLogoutButton(text: "LOGOUT"),
                     ),
-                    KProfileDetails(
-                        title: "Username",
-                        value: isLoading ? " " : "${applicationUser!.userName}",
-                        imageString: "assets/usernameicon.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
-                    ),
-                    KProfileDetails(
-                        title: "Gender",
-                        value: isLoading ? " " : "${applicationUser!.gender}",
-                        imageString: "assets/gendericon.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
-                    ),
-                    KProfileDetails(
-                        title: "Age",
-                        value: isLoading
-                            ? " "
-                            : "${applicationUser!.age.toString()}",
-                        imageString: "assets/ageicon.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
-                    ),
-                    KProfileDetails(
-                        title: "Weight",
-                        value: isLoading
-                            ? " "
-                            : "${applicationUser!.weight.toString()} kg",
-                        imageString: "assets/weight2.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
-                    ),
-                    KProfileDetails(
-                        title: "Height",
-                        value: isLoading
-                            ? " "
-                            : "${applicationUser!.heightInCm.toString()} cm",
-                        imageString: "assets/heighticon.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
-                    ),
-                    KProfileDetails(
-                        title: "Activity Level",
-                        value: isLoading
-                            ? " "
-                            : "${applicationUser!.userActivityLevel}",
-                        imageString: "assets/activity.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
-                    ),
-                    KProfileDetails(
-                        title: "Goal",
-                        value: isLoading ? " " : "${applicationUser!.goal}",
-                        imageString: "assets/newgoalicon.svg"),
-                    const Divider(
-                      color: Color(kPrimaryBackgroundColor),
-                      thickness: 3,
-                    ),
-                    SizedBox(
-                      height: getProportionateScreenHeight(20),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        //CALL THE LOGOUT ENDPOINT THAT YOU CREATE
-                        clearSecureStorage();
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return const Login();
-                          }),
-                          (route) => false,
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            getProportionateScreenWidth(80),
-                            0,
-                            getProportionateScreenWidth(80),
-                            0),
-                        child: const FLogoutButton(text: "LOGOUT"),
-                      ),
-                    ),
-                    SizedBox(
-                      height: getProportionateScreenHeight(20),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(20),
+                  )
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-}
-
-void clearSecureStorage() async {
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  await secureStorage.deleteAll();
 }
 
 class KProfileDetails extends StatelessWidget {
@@ -283,10 +256,13 @@ class KProfileDetails extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title!,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 23),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    title!,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 23),
+                  ),
                 ),
                 SizedBox(
                   height: getProportionateScreenHeight(5),

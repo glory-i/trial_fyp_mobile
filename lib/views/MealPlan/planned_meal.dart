@@ -1,27 +1,47 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:trial_fyp_mobile/models/authentication/meal/mealplan.dart';
+import 'package:trial_fyp_mobile/services/mealservices/mealServices.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
 import 'package:trial_fyp_mobile/utility/constants.dart';
+import 'package:trial_fyp_mobile/utility/utility.dart';
+import 'package:trial_fyp_mobile/views/MealPlan/meal.dart';
 import 'package:trial_fyp_mobile/widgets/generated_meal.dart';
+import 'package:trial_fyp_mobile/widgets/loading_indicator.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
+import '../../models/authentication/loginResponseModel.dart';
 import '../../models/authentication/meal/finalmealplan.dart';
+import '../../models/authentication/meal/generateMealPlanRequest.dart';
+import '../../models/authentication/meal/meal.dart';
+import '../../services/authenticationServices/authenticationServices.dart';
 
 class PlannedMeal extends StatefulWidget {
   late FinalMealPlan finalMealPlan;
   late String? duration;
-  PlannedMeal({super.key, required this.finalMealPlan, required this.duration});
+  late GenerateMealPlanRequestModel? generateMealPlanRequestModel;
+  PlannedMeal(
+      {super.key,
+      required this.finalMealPlan,
+      required this.duration,
+      required this.generateMealPlanRequestModel});
 
   @override
   State<PlannedMeal> createState() =>
-      _PlannedMealState(finalMealPlan, duration);
+      _PlannedMealState(finalMealPlan, duration, generateMealPlanRequestModel);
 }
 
 class _PlannedMealState extends State<PlannedMeal> {
   late FinalMealPlan finalMealPlan;
   late String? duration;
-  _PlannedMealState(this.finalMealPlan, this.duration);
+  late GenerateMealPlanRequestModel? generateMealPlanRequestModel;
+  _PlannedMealState(
+      this.finalMealPlan, this.duration, this.generateMealPlanRequestModel);
+
+  late bool isLoading = false;
 
   final PageController _pageController = PageController();
   int currentIndex = 0;
@@ -41,18 +61,17 @@ class _PlannedMealState extends State<PlannedMeal> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
-                onTap: currentIndex == 0
+                onTap: currentDay == 1
                     ? null
                     : () {
                         _pageController.previousPage(
                             duration: const Duration(milliseconds: 200),
                             curve: Curves.easeIn);
-                        if (!mounted) return;
                         setState(() {
                           currentDay--;
                         });
                       },
-                child: currentIndex == 0
+                child: currentDay == 1
                     ? SvgPicture.asset(
                         "assets/group53.svg",
                         width: getProportionateScreenWidth(56),
@@ -66,7 +85,7 @@ class _PlannedMealState extends State<PlannedMeal> {
               ),
               Text(
                 'Day $currentDay',
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
@@ -78,7 +97,6 @@ class _PlannedMealState extends State<PlannedMeal> {
                         _pageController.nextPage(
                             duration: const Duration(milliseconds: 200),
                             curve: Curves.easeIn);
-                        if (!mounted) return;
                         setState(() {
                           currentDay++;
                         });
@@ -107,11 +125,10 @@ class _PlannedMealState extends State<PlannedMeal> {
           children: [
             SizedBox(height: getProportionateScreenHeight(30)),
             SizedBox(
-              height: getProportionateScreenHeight(2000),
+              height: getProportionateScreenHeight(1800),
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (index) {
-                  if (!mounted) return;
                   setState(() {
                     currentIndex = index;
                   });
@@ -134,7 +151,8 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: getProportionateScreenHeight(20),
                         ),
                         GeneratedMeal(
-                          onPressed: () {},
+                          onPressed: () => moveToMealScreen(
+                              finalMealPlan.mealPlans![index].meals![0]),
                           meal: finalMealPlan.mealPlans![index].meals![0],
                         ),
                         const Divider(
@@ -154,7 +172,8 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: getProportionateScreenHeight(20),
                         ),
                         GeneratedMeal(
-                          onPressed: () {},
+                          onPressed: () => moveToMealScreen(
+                              finalMealPlan.mealPlans![index].meals![1]),
                           meal: finalMealPlan.mealPlans![index].meals![1],
                         ),
                         const Divider(
@@ -174,7 +193,8 @@ class _PlannedMealState extends State<PlannedMeal> {
                           height: getProportionateScreenHeight(20),
                         ),
                         GeneratedMeal(
-                          onPressed: () {},
+                          onPressed: () => moveToMealScreen(
+                              finalMealPlan.mealPlans![index].meals![2]),
                           meal: finalMealPlan.mealPlans![index].meals![2],
                         ),
                         const Divider(
@@ -185,23 +205,51 @@ class _PlannedMealState extends State<PlannedMeal> {
                         SizedBox(height: getProportionateScreenHeight(30)),
 
                         /// Totals
-                        const Text(
-                          'TOTALS',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              'TOTALS',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'TARGETS',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
+
                         SizedBox(height: getProportionateScreenHeight(20)),
 
                         /// Calories
-                        TotalsCard(
-                          image: 'assets/caloriesImg.png',
-                          totalName: 'Calories',
-                          totalCalculation:
-                              '${finalMealPlan.mealPlans![index].totalCalories.toString()}kcal',
-                          color: 0xFF000000,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TotalsCard(
+                              image: 'assets/caloriesImg.png',
+                              totalName: 'Calories',
+                              totalCalculation:
+                                  '${finalMealPlan.mealPlans![index].totalCalories.toString()}kcal',
+                              color: 0xFF000000,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  0, getProportionateScreenHeight(17), 0, 0),
+                              child: Text(
+                                '${finalMealPlan.mealPlans![index].targetCalories.toString()} kcal',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                            )
+                          ],
                         ),
+
                         const Divider(
                           color: Color(kGreenColor),
                           height: 30,
@@ -211,12 +259,26 @@ class _PlannedMealState extends State<PlannedMeal> {
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Carbs
-                        TotalsCard(
-                          image: 'assets/carbo.png',
-                          totalName: 'Carbs',
-                          totalCalculation:
-                              '${finalMealPlan.mealPlans![index].totalCarbs.toString()}kg',
-                          color: kErrorColor,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TotalsCard(
+                              image: 'assets/carbo.png',
+                              totalName: 'Carbs',
+                              totalCalculation:
+                                  '${finalMealPlan.mealPlans![index].totalCarbs.toString()}g',
+                              color: kErrorColor,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  0, getProportionateScreenHeight(17), 0, 0),
+                              child: Text(
+                                '${finalMealPlan.mealPlans![index].targetMinCarbs.toString()} - ${finalMealPlan.mealPlans![index].targetMaxCarbs.toString()}g',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Color(kErrorColor)),
+                              ),
+                            )
+                          ],
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -227,12 +289,26 @@ class _PlannedMealState extends State<PlannedMeal> {
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Protein
-                        TotalsCard(
-                          image: 'assets/proteinss.png',
-                          totalName: 'Protein',
-                          totalCalculation:
-                              '${finalMealPlan.mealPlans![index].totalProtein.toString()}kg',
-                          color: kGreenColor,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TotalsCard(
+                              image: 'assets/proteinss.png',
+                              totalName: 'Protein',
+                              totalCalculation:
+                                  '${finalMealPlan.mealPlans![index].totalProtein.toString()}g',
+                              color: kGreenColor,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  0, getProportionateScreenHeight(17), 0, 0),
+                              child: Text(
+                                '${finalMealPlan.mealPlans![index].targetMinProtein.toString()} - ${finalMealPlan.mealPlans![index].targetMaxProtein.toString()}g',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Color(kGreenColor)),
+                              ),
+                            )
+                          ],
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -243,12 +319,26 @@ class _PlannedMealState extends State<PlannedMeal> {
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Fat
-                        TotalsCard(
-                          image: 'assets/fat.png',
-                          totalName: 'Fats',
-                          totalCalculation:
-                              '${finalMealPlan.mealPlans![index].totalFat.toString()}kg',
-                          color: kBlueColor,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TotalsCard(
+                              image: 'assets/fat.png',
+                              totalName: 'Fats',
+                              totalCalculation:
+                                  '${finalMealPlan.mealPlans![index].totalFat.toString()}g',
+                              color: kBlueColor,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  0, getProportionateScreenHeight(17), 0, 0),
+                              child: Text(
+                                '${finalMealPlan.mealPlans![index].targetMinFat.toString()} - ${finalMealPlan.mealPlans![index].targetMaxFat.toString()}g',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Color(kBlueColor)),
+                              ),
+                            )
+                          ],
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -259,12 +349,58 @@ class _PlannedMealState extends State<PlannedMeal> {
                         SizedBox(height: getProportionateScreenHeight(15)),
 
                         /// Cost
-                        TotalsCard(
-                          image: 'assets/cost.png',
-                          totalName: 'Cost',
-                          totalCalculation:
-                              '₦${finalMealPlan.mealPlans![index].totalCost.toString()}',
-                          color: 0xFF000000,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TotalsCard(
+                              image: 'assets/cost.png',
+                              totalName: 'Cost',
+                              totalCalculation:
+                                  '₦${finalMealPlan.mealPlans![index].totalCost.toString()}',
+                              color: 0xFF000000,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  0, getProportionateScreenHeight(17), 0, 0),
+                              child: Text(
+                                '₦${finalMealPlan.mealPlans![index].targetMinCost.toString()} - ${finalMealPlan.mealPlans![index].targetMaxCost.toString()}',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                            )
+                          ],
+                        ),
+
+                        const Divider(
+                          color: Color(kGreenColor),
+                          height: 30,
+                          thickness: 1,
+                        ),
+
+                        SizedBox(height: getProportionateScreenHeight(15)),
+
+                        // Fitness
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TotalsCard(
+                              image: 'assets/fitness.png',
+                              totalName: 'Fitness score',
+                              totalCalculation: finalMealPlan
+                                  .mealPlans![index].fitness
+                                  .toString(),
+                              color: 0xFF000000,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  0, getProportionateScreenHeight(17), 0, 0),
+                              child: Text(
+                                '0.0 - 1.0',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                            )
+                          ],
                         ),
                         const Divider(
                           color: Color(kGreenColor),
@@ -309,7 +445,46 @@ class _PlannedMealState extends State<PlannedMeal> {
                                   fontWeight: FontWeight.bold)),
                         ),
                         SizedBox(height: getProportionateScreenHeight(50)),
-                        FPrimaryButton(text: 'Regenerate')
+                        isLoading
+                            ? const FLoadingScreen()
+                            : GestureDetector(
+                                onTap: () async {
+                                  if (await hasInternetConnection()) {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    var loginResponseModel =
+                                        loginResponseModelFromJson(
+                                            await getLoginResponse() ?? "");
+                                    var apiResponse = await regenerateMealPlan(
+                                        await getToken(),
+                                        duration!,
+                                        currentIndex.toString(),
+                                        generateMealPlanRequestModel!);
+                                    if (apiResponse!.message == failure) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      showErrorSnackBar(
+                                          apiResponse.error!.message, context);
+                                    } else {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      finalMealPlan.mealPlans![currentIndex] =
+                                          mealPlanFromJson(
+                                              json.encode(apiResponse.data));
+                                    }
+                                  } else {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    showErrorSnackBar(
+                                        "Failed to connect, Check your internet connection",
+                                        context);
+                                  }
+                                },
+                                child: const FPrimaryButton(text: 'Regenerate'))
                       ],
                     ),
                   );
@@ -320,6 +495,13 @@ class _PlannedMealState extends State<PlannedMeal> {
         ),
       ),
     );
+  }
+
+  dynamic moveToMealScreen(Meal meal) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => MealScreen(
+              meal: meal,
+            )));
   }
 }
 

@@ -30,7 +30,7 @@ class _OTPScreenState extends State<OTPScreen> {
   @override
   void initState() {
     //PLEASE DO NOT FORGET TO UNCOMMENT THIS WHEN THE TIME REACHES !!!!! ALSO THE ONE FOR RESEND CODEEEE
-    //sendOtp(validateModel.userName, validateModel.email);
+    sendOtp(validateModel.userName, validateModel.email);
     super.initState();
   }
 
@@ -94,7 +94,6 @@ class _OTPScreenState extends State<OTPScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     onCompleted: (value) {
-                      if (!mounted) return;
                       setState(() {
                         otp = int.parse(value);
                       });
@@ -131,8 +130,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   validateModel: validateModel,
                                 )));
                       }
-                      //call validate otp at the backend and pass otp
-                      if (!mounted) return;
+                      // //call validate otp at the backend and pass otp
                       setState(() {
                         isLoading = true;
                       });
@@ -140,14 +138,12 @@ class _OTPScreenState extends State<OTPScreen> {
                         var apiResponse = await validateOtp(otp.toString(),
                             validateModel.userName, validateModel.email);
                         if (apiResponse!.message == failure) {
-                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });
                           showErrorSnackBar(
                               apiResponse.error!.message, context);
                         } else {
-                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });
@@ -160,7 +156,6 @@ class _OTPScreenState extends State<OTPScreen> {
                         showErrorSnackBar(
                             "Failed to connect, Please check your connection",
                             context);
-                        if (!mounted) return;
                         setState(() {
                           isLoading = false;
                         });
@@ -185,29 +180,29 @@ class _OTPScreenState extends State<OTPScreen> {
                   onPressed: () async {
                     //call the send email endpoint again
                     //PLEASEEE DO NOT FORGET TO UN COMMENT THIS ENDPOINT WHEN THE TIME SHOULD REACH
-                    if (!mounted) return;
                     setState(() {
                       isLoading = true;
                     });
 
                     if (await hasInternetConnection()) {
-                      var apiResponse = await sendOtp(
-                          validateModel.userName, validateModel.email);
+                      var apiResponse =
+                          await sendOtp(validateModel.userName, validateModel.email);
                       if (apiResponse!.message == failure) {
-                        if (!mounted) return;
                         setState(() {
                           isLoading = false;
                         });
                         showErrorSnackBar(apiResponse.error!.message, context);
-                      } else {
-                        if (!mounted) return;
+                      }
+
+                      else{
                         setState(() {
                           isLoading = false;
                         });
-                        showSuccessSnackBar("OTP has been resent", context);
+                        showSuccessSnackBar("OTP has been resent",context);
                       }
-                    } else {
-                      if (!mounted) return;
+
+                    }
+                    else {
                       setState(() {
                         isLoading = false;
                       });
