@@ -136,6 +136,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       value: budgetRangeString,
                       onChanged: (value) {
                         if (!mounted) return;
+                        if (!mounted) return;
                         setState(() {
                           budgetRangeString = value as String;
                           minBudget =
@@ -168,6 +169,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         //         )));
                         if (_formkey.currentState!.validate()) {
                           if (!mounted) return;
+                          if (!mounted) return;
                           setState(() {
                             isLoading = true;
                           });
@@ -187,6 +189,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
                             if (apiResponse!.message == failure) {
                               if (!mounted) return;
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });
@@ -195,6 +198,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                             } else {
                               var finalMealPlan = finalMealPlanFromJson(
                                   json.encode(apiResponse.data));
+                              if (!mounted) return;
                               if (!mounted) return;
                               setState(() {
                                 isLoading = false;
@@ -214,6 +218,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                             }
                           } else {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -224,7 +229,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
                           //WE WILL ADD THIS ONE LATER
                           //       if (!mounted) return;
-//setState(() {
+//if(!mounted) return; setState(() {
                           //   isLoading = true;
                           // });
                         }

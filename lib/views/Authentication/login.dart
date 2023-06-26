@@ -136,6 +136,7 @@ class _LoginState extends State<Login> {
                                 ),
                           onPressed: () {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               isPasswordVisible = !isPasswordVisible;
                             });
@@ -191,6 +192,7 @@ class _LoginState extends State<Login> {
 
                       if (_formkey.currentState!.validate()) {
                         if (!mounted) return;
+                        if (!mounted) return;
                         setState(() {
                           isLoading = true;
                         });
@@ -203,6 +205,7 @@ class _LoginState extends State<Login> {
                               password: passwordController.text));
 
                           if (apiResponse!.message == failure) {
+                            if (!mounted) return;
                             if (!mounted) return;
                             setState(() {
                               isLoading = false;
@@ -225,6 +228,7 @@ class _LoginState extends State<Login> {
                             //getLoginResponse();
 
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -237,6 +241,7 @@ class _LoginState extends State<Login> {
                             //PUSH TO HOME SCREEN IF LOGIN SUCCESSFUL
                           }
                         } else {
+                          if (!mounted) return;
                           if (!mounted) return;
                           setState(() {
                             isLoading = false;

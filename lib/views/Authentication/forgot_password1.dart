@@ -97,6 +97,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) {
                         if (!mounted) return;
+                        if (!mounted) return;
                         setState(() {
                           userEmail = (value);
                         });
@@ -127,6 +128,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       onTap: () async {
                         if (_formkey.currentState!.validate()) {
                           if (!mounted) return;
+                          if (!mounted) return;
                           setState(() {
                             isLoading = true;
                           });
@@ -135,12 +137,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 await validateUserExists(userEmail);
                             if (apiResponse!.message == failure) {
                               if (!mounted) return;
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });
                               showErrorSnackBar(
                                   apiResponse.error!.message, context);
                             } else {
+                              if (!mounted) return;
                               if (!mounted) return;
                               setState(() {
                                 isLoading = false;

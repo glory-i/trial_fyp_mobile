@@ -130,6 +130,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           value: gender,
                           onChanged: (value) {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               gender = value as String;
                               //updateButtonState();
@@ -173,6 +174,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           items: listOfAges.map(buildMenuItem).toList(),
                           value: ageString,
                           onChanged: (value) {
+                            if (!mounted) return;
                             if (!mounted) return;
                             setState(() {
                               ageString = value as String;
@@ -220,6 +222,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                                       RegExp('[0-9]'))
                                 ],
                                 onChanged: (value) {
+                                  if (!mounted) return;
                                   if (!mounted) return;
                                   setState(() {
                                     //WE NEED TO CHANGE THIS
@@ -291,6 +294,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               value: feetString,
                               onChanged: (value) {
                                 if (!mounted) return;
+                                if (!mounted) return;
                                 setState(() {
                                   feetString = value as String;
                                   feet = double.parse(feetString!);
@@ -333,6 +337,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               items: listOfInches.map(buildMenuItem).toList(),
                               value: inchesString,
                               onChanged: (value) {
+                                if (!mounted) return;
                                 if (!mounted) return;
                                 setState(() {
                                   inchesString = value as String;
@@ -383,6 +388,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           value: activityLevel,
                           onChanged: (value) {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               activityLevel = value as String;
                               //updateButtonState();
@@ -424,6 +430,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                             value: goal,
                             onChanged: (value) {
                               if (!mounted) return;
+                              if (!mounted) return;
                               setState(() {
                                 goal = value as String;
                                 //updateButtonState();
@@ -438,6 +445,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                       GestureDetector(
                         onTap: () async {
                           if (_formkey.currentState!.validate()) {
+                            if (!mounted) return;
                             if (!mounted) return;
                             setState(() {
                               isLoading = true;
@@ -459,6 +467,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                                 showErrorSnackBar(
                                     apiResponse.error!.message, context);
                                 if (!mounted) return;
+                                if (!mounted) return;
                                 setState(() {
                                   isLoading = false;
                                 });
@@ -466,6 +475,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                                 var nutritionResponseModel =
                                     nutritionCalculatorResponseModelFromJson(
                                         json.encode(apiResponse.data));
+                                if (!mounted) return;
                                 if (!mounted) return;
                                 setState(() {
                                   isLoading = false;
@@ -480,6 +490,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               showErrorSnackBar(
                                   "Failed to connect, Check your internet connection",
                                   context);
+                              if (!mounted) return;
                               if (!mounted) return;
                               setState(() {
                                 isLoading = false;

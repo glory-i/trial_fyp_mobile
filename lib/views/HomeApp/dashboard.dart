@@ -55,7 +55,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> getLoginResponseData() async {
     loginResponseModel =
         loginResponseModelFromJson(await getLoginResponse() ?? "");
-    // setState(() {
+    // if(!mounted) return; setState(() {
     //   isLoading = false;
     // });
   }
@@ -64,6 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (await hasInternetConnection()) {
       var apiResponse = await getPopularBreakfasts();
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
           isGotten = true;
@@ -71,6 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         showErrorSnackBar(apiResponse.error!.message, context);
       } else {
         listOfMeals = mealsFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
           isGotten = true;
@@ -86,12 +88,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (await hasInternetConnection()) {
       var apiResponse = await getPopularLunches();
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
         showErrorSnackBar(apiResponse.error!.message, context);
       } else {
         listOfMeals = mealsFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
@@ -106,12 +110,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (await hasInternetConnection()) {
       var apiResponse = await getPopularDinner();
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
         showErrorSnackBar(apiResponse.error!.message, context);
       } else {
         listOfMeals = mealsFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
@@ -158,6 +164,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             var apiResponse =
                                 await getSearchedMeals(searchController.text);
                             if (apiResponse!.message == failure) {
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });
@@ -174,6 +181,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       searchString: searchController.text,
                                     )));
                           } else {
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -192,6 +200,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   var apiResponse = await getSearchedMeals(
                                       searchController.text);
                                   if (apiResponse!.message == failure) {
+                                    if (!mounted) return;
                                     setState(() {
                                       isLoading = false;
                                     });
@@ -209,6 +218,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             searchString: searchController.text,
                                           )));
                                 } else {
+                                  if (!mounted) return;
                                   setState(() {
                                     isLoading = false;
                                   });
@@ -236,6 +246,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             MealTimeCard(
                               onPressed: () async {
+                                if (!mounted) return;
                                 setState(() {
                                   selectedMealTime = MealTime.breakfast;
                                 });
@@ -253,6 +264,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             SizedBox(width: getProportionateScreenWidth(30)),
                             MealTimeCard(
                               onPressed: () async {
+                                if (!mounted) return;
                                 setState(() {
                                   selectedMealTime = MealTime.lunch;
                                 });
@@ -269,6 +281,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             SizedBox(width: getProportionateScreenWidth(30)),
                             MealTimeCard(
                               onPressed: () async {
+                                if (!mounted) return;
                                 setState(() {
                                   selectedMealTime = MealTime.dinner;
                                 });

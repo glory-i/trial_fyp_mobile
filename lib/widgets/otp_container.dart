@@ -31,13 +31,13 @@ class _OTPContainerState extends State<OTPContainer> {
         onChanged: (value) {
           if (color == const Color(0XFFC5C5C5)) {
                   if (!mounted) return;
-setState(() {
+if(!mounted) return; setState(() {
               color = const Color(0xFF31990D);
             });
           }
           else {
                   if (!mounted) return;
-setState(() {
+if(!mounted) return; setState(() {
               color = const Color(0XFFC5C5C5);
             });
           }

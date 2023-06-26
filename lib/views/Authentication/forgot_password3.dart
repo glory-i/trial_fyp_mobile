@@ -104,6 +104,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) {
                         if (!mounted) return;
+                        if (!mounted) return;
                         setState(() {
                           newPassword = (value);
                         });
@@ -121,6 +122,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     color: Colors.grey,
                                   ),
                             onPressed: () {
+                              if (!mounted) return;
                               if (!mounted) return;
                               setState(() {
                                 isnewPasswordVisible = !isnewPasswordVisible;
@@ -171,6 +173,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (confirmValue) {
                         if (!mounted) return;
+                        if (!mounted) return;
                         setState(() {
                           confirmNewPassword = (confirmValue);
                         });
@@ -188,6 +191,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     color: Colors.grey,
                                   ),
                             onPressed: () {
+                              if (!mounted) return;
                               if (!mounted) return;
                               setState(() {
                                 isConfirmNewPasswordVisible =
@@ -218,6 +222,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       onTap: () async {
                         if (_formkey.currentState!.validate()) {
                           if (!mounted) return;
+                          if (!mounted) return;
                           setState(() {
                             isLoading = true;
                           });
@@ -229,12 +234,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 email, newPassword, confirmNewPassword);
                             if (apiResponse!.message == failure) {
                               if (!mounted) return;
+                              if (!mounted) return;
                               setState(() {
                                 isLoading = false;
                               });
                               showErrorSnackBar(
                                   apiResponse.error!.message, context);
                             } else {
+                              if (!mounted) return;
                               if (!mounted) return;
                               setState(() {
                                 isLoading = false;
@@ -249,6 +256,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               //PUSH TO LOGIN
                             }
                           } else {
+                            if (!mounted) return;
                             if (!mounted) return;
                             setState(() {
                               isLoading = false;

@@ -37,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var apiResponse = await viewUser(await getToken());
 
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
@@ -44,11 +45,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       } else {
         applicationUser =
             applicationUserFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
       }
     } else {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });

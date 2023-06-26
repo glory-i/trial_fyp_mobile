@@ -67,6 +67,7 @@ class _PlannedMealState extends State<PlannedMeal> {
                         _pageController.previousPage(
                             duration: const Duration(milliseconds: 200),
                             curve: Curves.easeIn);
+                        if (!mounted) return;
                         setState(() {
                           currentDay--;
                         });
@@ -97,6 +98,7 @@ class _PlannedMealState extends State<PlannedMeal> {
                         _pageController.nextPage(
                             duration: const Duration(milliseconds: 200),
                             curve: Curves.easeIn);
+                        if (!mounted) return;
                         setState(() {
                           currentDay++;
                         });
@@ -129,6 +131,7 @@ class _PlannedMealState extends State<PlannedMeal> {
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (index) {
+                  if (!mounted) return;
                   setState(() {
                     currentIndex = index;
                   });
@@ -451,6 +454,7 @@ class _PlannedMealState extends State<PlannedMeal> {
                             : GestureDetector(
                                 onTap: () async {
                                   if (await hasInternetConnection()) {
+                                    if (!mounted) return;
                                     setState(() {
                                       isLoading = true;
                                     });
@@ -463,12 +467,14 @@ class _PlannedMealState extends State<PlannedMeal> {
                                         currentIndex.toString(),
                                         generateMealPlanRequestModel!);
                                     if (apiResponse!.message == failure) {
+                                      if (!mounted) return;
                                       setState(() {
                                         isLoading = false;
                                       });
                                       showErrorSnackBar(
                                           apiResponse.error!.message, context);
                                     } else {
+                                      if (!mounted) return;
                                       setState(() {
                                         isLoading = false;
                                       });
@@ -477,6 +483,7 @@ class _PlannedMealState extends State<PlannedMeal> {
                                               json.encode(apiResponse.data));
                                     }
                                   } else {
+                                    if (!mounted) return;
                                     setState(() {
                                       isLoading = false;
                                     });

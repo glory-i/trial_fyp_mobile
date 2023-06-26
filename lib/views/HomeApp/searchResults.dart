@@ -86,6 +86,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
             TextFormField(
               controller: searchController,
               onChanged: (value) {
+                if (!mounted) return;
                 setState(() {
                   searchString = value;
                 });
@@ -95,17 +96,20 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   var apiResponse =
                       await getSearchedMeals(searchController.text);
                   if (apiResponse!.message == failure) {
+                    if (!mounted) return;
                     setState(() {
                       isLoading = false;
                     });
                     showErrorSnackBar(apiResponse.error!.message, context);
                   } else {
+                    if (!mounted) return;
                     setState(() {
                       listOfSearchedMeals =
                           mealsFromJson(json.encode(apiResponse.data));
                     });
                   }
                 } else {
+                  if (!mounted) return;
                   setState(() {
                     isLoading = false;
                   });
@@ -123,18 +127,21 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                         var apiResponse =
                             await getSearchedMeals(searchController.text);
                         if (apiResponse!.message == failure) {
+                          if (!mounted) return;
                           setState(() {
                             isLoading = false;
                           });
                           showErrorSnackBar(
                               apiResponse.error!.message, context);
                         } else {
+                          if (!mounted) return;
                           setState(() {
                             listOfSearchedMeals =
                                 mealsFromJson(json.encode(apiResponse.data));
                           });
                         }
                       } else {
+                        if (!mounted) return;
                         setState(() {
                           isLoading = false;
                         });
@@ -149,7 +156,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
             ),
             SizedBox(height: getProportionateScreenHeight(20)),
             Padding(
-              padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(20),0,getProportionateScreenWidth(0),0),
+              padding: EdgeInsets.fromLTRB(getProportionateScreenWidth(20), 0,
+                  getProportionateScreenWidth(0), 0),
               child: Container(
                 height: getProportionateScreenHeight(700),
                 //padding: const EdgeInsets.only(bottom: 10),
