@@ -42,6 +42,7 @@ class _OnboardingState extends State<Onboarding> {
                   controller: _controller,
                   onPageChanged: (int index) {
                     if (!mounted) return;
+                    if (!mounted) return;
                     setState(() {
                       currentIndex = index;
                     });

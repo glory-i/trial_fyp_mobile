@@ -28,6 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   LoginResponseModel? loginResponseModel;
   List<Meal>? listOfMeals;
   bool isLoading = true;
+  bool isGotten = false;
   MealTime? selectedMealTime;
 
   final searchController = TextEditingController();
@@ -54,7 +55,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> getLoginResponseData() async {
     loginResponseModel =
         loginResponseModelFromJson(await getLoginResponse() ?? "");
-    // setState(() {
+    // if(!mounted) return; setState(() {
     //   isLoading = false;
     // });
   }
@@ -63,14 +64,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (await hasInternetConnection()) {
       var apiResponse = await getPopularBreakfasts();
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
+          isGotten = true;
         });
         showErrorSnackBar(apiResponse.error!.message, context);
       } else {
         listOfMeals = mealsFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
+          isGotten = true;
         });
       }
     } else {
@@ -83,12 +88,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (await hasInternetConnection()) {
       var apiResponse = await getPopularLunches();
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
         showErrorSnackBar(apiResponse.error!.message, context);
       } else {
         listOfMeals = mealsFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
@@ -103,12 +110,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (await hasInternetConnection()) {
       var apiResponse = await getPopularDinner();
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
         showErrorSnackBar(apiResponse.error!.message, context);
       } else {
         listOfMeals = mealsFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
@@ -124,7 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoading
-          ? const CircularProgressIndicator()
+          ? Center(child: const CircularProgressIndicator())
           : SafeArea(
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -152,35 +161,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       TextFormField(
                         onFieldSubmitted: (value) async {
                           if (await hasInternetConnection()) {
-                                  var apiResponse = await getSearchedMeals(
-                                      searchController.text);
-                                  if (apiResponse!.message == failure) {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    showErrorSnackBar(
-                                        apiResponse.error!.message, context);
-                                  }
-                                  else{
-                                  listOfSearchedMeals = mealsFromJson(
-                                  json.encode(apiResponse.data));
-                                  }
+                            var apiResponse =
+                                await getSearchedMeals(searchController.text);
+                            if (apiResponse!.message == failure) {
+                              if (!mounted) return;
+                              setState(() {
+                                isLoading = false;
+                              });
+                              showErrorSnackBar(
+                                  apiResponse.error!.message, context);
+                            } else {
+                              listOfSearchedMeals =
+                                  mealsFromJson(json.encode(apiResponse.data));
+                            }
 
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                         SearchResultsScreen(listOfSearchedMeals: listOfSearchedMeals!,
-                                         searchString: searchController.text,
-                                         )));
-
-                                } else {
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                  showErrorSnackBar(
-                                      "Failed to connect, Check your internet connection",
-                                      context);
-                                }
-
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SearchResultsScreen(
+                                      listOfSearchedMeals: listOfSearchedMeals!,
+                                      searchString: searchController.text,
+                                    )));
+                          } else {
+                            if (!mounted) return;
+                            setState(() {
+                              isLoading = false;
+                            });
+                            showErrorSnackBar(
+                                "Failed to connect, Check your internet connection",
+                                context);
+                          }
                         },
                         controller: searchController,
                         decoration: InputDecoration(
@@ -192,24 +200,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   var apiResponse = await getSearchedMeals(
                                       searchController.text);
                                   if (apiResponse!.message == failure) {
+                                    if (!mounted) return;
                                     setState(() {
                                       isLoading = false;
                                     });
                                     showErrorSnackBar(
                                         apiResponse.error!.message, context);
-                                  }
-                                  else{
-                                  listOfSearchedMeals = mealsFromJson(
-                                  json.encode(apiResponse.data));
+                                  } else {
+                                    listOfSearchedMeals = mealsFromJson(
+                                        json.encode(apiResponse.data));
                                   }
 
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                         SearchResultsScreen(listOfSearchedMeals: listOfSearchedMeals!,
-                                         searchString: searchController.text,
-                                         )));
-
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => SearchResultsScreen(
+                                            listOfSearchedMeals:
+                                                listOfSearchedMeals!,
+                                            searchString: searchController.text,
+                                          )));
                                 } else {
+                                  if (!mounted) return;
                                   setState(() {
                                     isLoading = false;
                                   });
@@ -217,8 +226,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       "Failed to connect, Check your internet connection",
                                       context);
                                 }
-
-
                               },
                             ),
                             border: OutlineInputBorder(
@@ -239,6 +246,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             MealTimeCard(
                               onPressed: () async {
+                                if (!mounted) return;
                                 setState(() {
                                   selectedMealTime = MealTime.breakfast;
                                 });
@@ -256,6 +264,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             SizedBox(width: getProportionateScreenWidth(30)),
                             MealTimeCard(
                               onPressed: () async {
+                                if (!mounted) return;
                                 setState(() {
                                   selectedMealTime = MealTime.lunch;
                                 });
@@ -272,6 +281,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             SizedBox(width: getProportionateScreenWidth(30)),
                             MealTimeCard(
                               onPressed: () async {
+                                if (!mounted) return;
                                 setState(() {
                                   selectedMealTime = MealTime.dinner;
                                 });
@@ -298,11 +308,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             separatorBuilder: (context, _) => SizedBox(
                                   width: getProportionateScreenWidth(30),
                                 ),
-                            itemBuilder: (context, index) => MealCard(
-                                  meal: listOfMeals![index],
-                                  onPressed: () =>
-                                      moveToMealScreen(listOfMeals![index]),
-                                )),
+                            itemBuilder: (context, index) => listOfMeals == null
+                                ? CircularProgressIndicator()
+                                : MealCard(
+                                    meal: listOfMeals![index],
+                                    onPressed: () =>
+                                        moveToMealScreen(listOfMeals![index]),
+                                  )),
                       ),
 
                       // SingleChildScrollView(
@@ -349,7 +361,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class MealCard extends StatelessWidget {
+class MealCard extends StatefulWidget {
   const MealCard(
       {super.key,
       this.onPressed,
@@ -365,10 +377,18 @@ class MealCard extends StatelessWidget {
   // final String calories;
   final Function()? onPressed;
   final Meal meal;
+
+  @override
+  State<MealCard> createState() => _MealCardState();
+}
+
+class _MealCardState extends State<MealCard> {
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: widget.onPressed,
       child: Container(
         //padding: EdgeInsets.all(getProportionateScreenWidth(10)),
         //height: getProportionateScreenHeight(10),
@@ -379,19 +399,23 @@ class MealCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                meal.flutterImageUrl!,
-                width: getProportionateScreenWidth(330),
-                height: getProportionateScreenHeight(180),
-                fit: BoxFit.cover,
-              ),
-            ),
+            _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      widget.meal.flutterImageUrl!,
+                      width: getProportionateScreenWidth(330),
+                      height: getProportionateScreenHeight(180),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
             SizedBox(
               width: getProportionateScreenWidth(330),
               child: Text(
-                meal.name!,
+                widget.meal.name!,
                 style:
                     const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
@@ -399,12 +423,12 @@ class MealCard extends StatelessWidget {
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
-            Text("₦${meal.cost!.toString()}",
+            Text("₦${widget.meal.cost!.toString()}",
                 style: const TextStyle(fontSize: 20)),
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
-            Text("${meal.calories!.toString()} kcal",
+            Text("${widget.meal.calories!.toString()} kcal",
                 style: const TextStyle(fontSize: 20))
           ],
         ),

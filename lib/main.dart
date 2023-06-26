@@ -22,14 +22,16 @@ class _MyAppState extends State<MyApp> {
       routes: {
         Onboarding.id: (context) => const Onboarding(),
         //Login.id: (context) => const Login(),
-        '/loginScreen': (context) => const Login(), 
+        '/loginScreen': (context) => const Login(),
         //NutritionCalculated.id: (context) => NutritionCalculated(nutritionResponseModel: )
       },
       //home: OTP(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          inputDecorationTheme:
-              const InputDecorationTheme(border: InputBorder.none)),
+        inputDecorationTheme:
+            const InputDecorationTheme(border: InputBorder.none),
+        scaffoldBackgroundColor: Colors.white,
+      ),
     );
   }
 }

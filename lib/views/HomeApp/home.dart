@@ -57,6 +57,7 @@ class _HomeState extends State<Home> {
             currentIndex: currentIndex,
             onTap: (index) {
               if (!mounted) return;
+              if (!mounted) return;
               setState(() {
                 currentIndex = index;
               });

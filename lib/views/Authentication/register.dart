@@ -211,6 +211,7 @@ class _RegisterState extends State<Register> {
                                 ),
                           onPressed: () {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               isPasswordVisible = !isPasswordVisible;
                             });
@@ -258,6 +259,7 @@ class _RegisterState extends State<Register> {
                                 ),
                           onPressed: () {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               isConfirmPasswordVisible =
                                   !isConfirmPasswordVisible;
@@ -302,6 +304,7 @@ class _RegisterState extends State<Register> {
                       if (_formkey.currentState!.validate()) {
                         //call api to validate username, email(CheckValidations), etc. If invalid display the error message, if valid move to otp screen
                         if (!mounted) return;
+                        if (!mounted) return;
                         setState(() {
                           isLoading = true;
                         });
@@ -318,6 +321,7 @@ class _RegisterState extends State<Register> {
                                   userName: usernameController.text));
 
                           if (apiResponse!.message == failure) {
+                            if (!mounted) return;
                             if (!mounted) return;
                             setState(() {
                               isLoading = false;
@@ -347,6 +351,7 @@ class _RegisterState extends State<Register> {
                               );*/
                           } else {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               isLoading = false;
                             });
@@ -365,6 +370,7 @@ class _RegisterState extends State<Register> {
                           showErrorSnackBar(
                               "Failed to connect, Please check your connection",
                               context);
+                          if (!mounted) return;
                           if (!mounted) return;
                           setState(() {
                             isLoading = false;

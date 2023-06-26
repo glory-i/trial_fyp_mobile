@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trial_fyp_mobile/models/authentication/applicationUser.dart';
 import 'package:trial_fyp_mobile/size_config.dart';
+import 'package:trial_fyp_mobile/views/Authentication/login.dart';
 import 'package:trial_fyp_mobile/views/HomeApp/updateProfile.dart';
 import 'package:trial_fyp_mobile/widgets/primary_button.dart';
 
@@ -35,19 +37,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var apiResponse = await viewUser(await getToken());
 
       if (apiResponse!.message == failure) {
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
         showErrorSnackBar(apiResponse.error!.message, context);
-      }
-      else{
-        applicationUser = applicationUserFromJson(json.encode(apiResponse.data));
+      } else {
+        applicationUser =
+            applicationUserFromJson(json.encode(apiResponse.data));
+        if (!mounted) return;
         setState(() {
           isLoading = false;
         });
       }
-
     } else {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });
@@ -70,7 +74,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () {
               ////send to update profile screen
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => UpdateProfileScreen(applicationUser: applicationUser!,)));
+                  builder: (context) => UpdateProfileScreen(
+                        applicationUser: applicationUser!,
+                      )));
             },
             child: Container(
               margin: EdgeInsets.only(
@@ -95,17 +101,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Column(
         children: [
           Stack(
+            alignment: Alignment.bottomCenter,
             children: [
-              SvgPicture.asset(
-                "assets/Ellipse18.svg",
+              Image.asset(
+                "assets/Ellipse_18.png",
+                height: getProportionateScreenHeight(200),
+                width: double.infinity,
+                fit: BoxFit.fill,
               ),
-              Positioned(
-                left: getProportionateScreenWidth(149),
-                top: getProportionateScreenHeight(106),
-                child: SvgPicture.asset(
-                  "assets/avatar.svg",
-                ),
-              )
+              Column(
+                children: [
+                  SvgPicture.asset(
+                    "assets/avatar.svg",
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(10),
+                  )
+                ],
+              ),
             ],
           ),
           Text(
@@ -131,8 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   KProfileDetails(
                       title: "Username",
-                      value:
-                          isLoading ? " " : "${applicationUser!.userName}",
+                      value: isLoading ? " " : "${applicationUser!.userName}",
                       imageString: "assets/usernameicon.svg"),
                   const Divider(
                     color: Color(kPrimaryBackgroundColor),
@@ -200,8 +212,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   GestureDetector(
                     onTap: () {
                       //CALL THE LOGOUT ENDPOINT THAT YOU CREATE
-                        // Navigate back to the login screen
-                        //Navigator.popUntil(context, ModalRoute.withName('/loginScreen'));
+                      // Navigate back to the login screen
+                      //Navigator.popUntil(context, ModalRoute.withName('/loginScreen'));
+                      clearSecureStorage();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return const Login();
+                        }),
+                        (route) => false,
+                      );
                     },
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(
@@ -222,6 +242,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  void clearSecureStorage() async {
+    FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+    await secureStorage.deleteAll();
   }
 }
 

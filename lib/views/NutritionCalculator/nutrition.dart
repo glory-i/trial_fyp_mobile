@@ -58,13 +58,15 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
       ),
       body: Column(children: [
         Stack(
+          alignment: Alignment.center,
           children: [
-            SvgPicture.asset(
-              "assets/Ellipse18.svg",
+            Image.asset(
+              "assets/Ellipse_18.png",
+              fit: BoxFit.fill,
+              height: getProportionateScreenHeight(170),
+              width: double.infinity,
             ),
-            Positioned(
-              left: getProportionateScreenWidth(55),
-              top: getProportionateScreenHeight(106),
+            const Center(
               child: Text(
                 "Nutrition Calculator",
                 style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
@@ -128,6 +130,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           value: gender,
                           onChanged: (value) {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               gender = value as String;
                               //updateButtonState();
@@ -172,6 +175,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           value: ageString,
                           onChanged: (value) {
                             if (!mounted) return;
+                            if (!mounted) return;
                             setState(() {
                               ageString = value as String;
                               age = int.parse(ageString!);
@@ -200,10 +204,10 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               height: getProportionateScreenHeight(55),
                               width: SizeConfig.screenWidth! * 0.5,
                               child: TextFormField(
-                                autovalidateMode: AutovalidateMode.onUserInteraction, //WE MAY NEED TO COMMENT THIS OUR O
-                                onSaved: (value){
+                                autovalidateMode: AutovalidateMode
+                                    .onUserInteraction, //WE MAY NEED TO COMMENT THIS OUR O
+                                onSaved: (value) {
                                   print(value);
-
                                 },
                                 validator: (value) {
                                   if (value!.isEmpty) {
@@ -218,6 +222,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                                       RegExp('[0-9]'))
                                 ],
                                 onChanged: (value) {
+                                  if (!mounted) return;
                                   if (!mounted) return;
                                   setState(() {
                                     //WE NEED TO CHANGE THIS
@@ -289,6 +294,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               value: feetString,
                               onChanged: (value) {
                                 if (!mounted) return;
+                                if (!mounted) return;
                                 setState(() {
                                   feetString = value as String;
                                   feet = double.parse(feetString!);
@@ -332,6 +338,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               value: inchesString,
                               onChanged: (value) {
                                 if (!mounted) return;
+                                if (!mounted) return;
                                 setState(() {
                                   inchesString = value as String;
                                   inches = double.parse(inchesString!);
@@ -365,7 +372,6 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           borderRadius: BorderRadius.circular(40),
                         ),
                         child: DropdownButtonFormField2(
-                          
                           //underline: SizedBox(),
                           validator: (value) {
                             if (value == null) {
@@ -381,6 +387,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               listOfActivityLevels.map(buildMenuItem).toList(),
                           value: activityLevel,
                           onChanged: (value) {
+                            if (!mounted) return;
                             if (!mounted) return;
                             setState(() {
                               activityLevel = value as String;
@@ -423,6 +430,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                             value: goal,
                             onChanged: (value) {
                               if (!mounted) return;
+                              if (!mounted) return;
                               setState(() {
                                 goal = value as String;
                                 //updateButtonState();
@@ -437,6 +445,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                       GestureDetector(
                         onTap: () async {
                           if (_formkey.currentState!.validate()) {
+                            if (!mounted) return;
                             if (!mounted) return;
                             setState(() {
                               isLoading = true;
@@ -458,6 +467,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                                 showErrorSnackBar(
                                     apiResponse.error!.message, context);
                                 if (!mounted) return;
+                                if (!mounted) return;
                                 setState(() {
                                   isLoading = false;
                                 });
@@ -465,6 +475,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                                 var nutritionResponseModel =
                                     nutritionCalculatorResponseModelFromJson(
                                         json.encode(apiResponse.data));
+                                if (!mounted) return;
                                 if (!mounted) return;
                                 setState(() {
                                   isLoading = false;
@@ -479,6 +490,7 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               showErrorSnackBar(
                                   "Failed to connect, Check your internet connection",
                                   context);
+                              if (!mounted) return;
                               if (!mounted) return;
                               setState(() {
                                 isLoading = false;
