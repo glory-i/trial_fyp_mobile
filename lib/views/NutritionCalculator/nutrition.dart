@@ -58,13 +58,15 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
       ),
       body: Column(children: [
         Stack(
+          alignment: Alignment.center,
           children: [
-            SvgPicture.asset(
-              "assets/Ellipse18.svg",
+            Image.asset(
+              "assets/Ellipse_18.png",
+              fit: BoxFit.fill,
+              height: getProportionateScreenHeight(170),
+              width: double.infinity,
             ),
-            Positioned(
-              left: getProportionateScreenWidth(55),
-              top: getProportionateScreenHeight(106),
+            const Center(
               child: Text(
                 "Nutrition Calculator",
                 style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
@@ -200,10 +202,10 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                               height: getProportionateScreenHeight(55),
                               width: SizeConfig.screenWidth! * 0.5,
                               child: TextFormField(
-                                autovalidateMode: AutovalidateMode.onUserInteraction, //WE MAY NEED TO COMMENT THIS OUR O
-                                onSaved: (value){
+                                autovalidateMode: AutovalidateMode
+                                    .onUserInteraction, //WE MAY NEED TO COMMENT THIS OUR O
+                                onSaved: (value) {
                                   print(value);
-
                                 },
                                 validator: (value) {
                                   if (value!.isEmpty) {
@@ -365,7 +367,6 @@ class _NutritionCalculatorScreenState extends State<NutritionCalculatorScreen> {
                           borderRadius: BorderRadius.circular(40),
                         ),
                         child: DropdownButtonFormField2(
-                          
                           //underline: SizedBox(),
                           validator: (value) {
                             if (value == null) {

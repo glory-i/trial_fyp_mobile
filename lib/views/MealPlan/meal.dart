@@ -20,11 +20,9 @@ class MealScreen extends StatefulWidget {
 
 //IDEALLY YOU WILL TAKE THE WHOLE MEAL AT ONCE
 class _MealScreenState extends State<MealScreen> {
-  
   final Meal? meal;
 
-  _MealScreenState(
-      this.meal);
+  _MealScreenState(this.meal);
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +35,11 @@ class _MealScreenState extends State<MealScreen> {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  
+
                   width: double.infinity, //MAY COMMENT THIS OUT OO!!!
-                  child: Image.network(meal!.flutterImageUrl!,
+                  child: Image.network(
+                    meal!.flutterImageUrl!,
                     fit: BoxFit.cover,
-                    
                   ),
                 ),
                 SizedBox(
@@ -64,14 +62,16 @@ class _MealScreenState extends State<MealScreen> {
                       ),
                       Text(
                         meal!.description!,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w400),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(20),
                       ),
                       Text(
                         'Sold at : ${meal!.producer!}',
-                        style: TextStyle(fontSize: 18,  fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w300),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(10),
@@ -92,6 +92,7 @@ class _MealScreenState extends State<MealScreen> {
                   child: Column(
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconDetails(
                               title: "Calories",
@@ -110,6 +111,7 @@ class _MealScreenState extends State<MealScreen> {
                         height: getProportionateScreenHeight(40),
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           PictureDetails(
                               title: "Protein",

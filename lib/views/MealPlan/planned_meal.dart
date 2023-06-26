@@ -206,6 +206,7 @@ class _PlannedMealState extends State<PlannedMeal> {
 
                         /// Totals
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: const [
                             Text(
