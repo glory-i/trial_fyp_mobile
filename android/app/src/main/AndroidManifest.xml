@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.trial_fyp_mobile">
    <application
-        android:label="trial_fyp_mobile"
+        android:label="FOODIFIED"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
